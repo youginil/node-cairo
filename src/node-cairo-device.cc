@@ -268,7 +268,7 @@ CairoDevice::ObserverElapsed(const Napi::CallbackInfo& info)
     return info.This();
   }
   double t = cairo_device_observer_elapsed(this->device_);
-  return Napi::Number::New(env, n);
+  return Napi::Number::New(env, t);
 }
 
 Napi::Value
