@@ -1,0 +1,31 @@
+{
+  "name": "node-cairo",
+  "version": "0.1.0",
+  "description": "NodeJS binding for cairo graphics library",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./tests/index.js",
+    "build:dev": "node-gyp --debug rebuild",
+    "install": "node-gyp rebuild"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yinliguo/node-cairo.git"
+  },
+  "keywords": [
+    "cairo"
+  ],
+  "author": "yinliguo",
+  "license": "Apache-2.0",
+  "gypfile": true,
+  "bugs": {
+    "url": "https://github.com/yinliguo/node-cairo/issues"
+  },
+  "homepage": "https://github.com/yinliguo/node-cairo#readme",
+  "dependencies": {
+    "node-addon-api": "^3.0.0"
+  },
+  "devDependencies": {
+    "node-gyp": "^7.0.0"
+  }
+}
