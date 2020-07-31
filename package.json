@@ -4,10 +4,12 @@
   "description": "NodeJS binding for cairo graphics library",
   "main": "index.js",
   "scripts": {
-    "test": "node ./tests/index.js",
+    "test": "node tests/index.js",
     "build:dev": "node-gyp --debug rebuild",
+    "build": "node-gyp rebuild",
     "install": "node-gyp rebuild"
   },
+  "typings": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yinliguo/node-cairo.git"

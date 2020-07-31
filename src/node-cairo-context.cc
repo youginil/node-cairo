@@ -93,6 +93,7 @@ CairoContext::Init(Napi::Env env, Napi::Object exports)
       InstanceMethod("moveTo", &CairoContext::MoveTo),
       InstanceMethod("rectangle", &CairoContext::Rectangle),
       InstanceMethod("glyphPath", &CairoContext::GlyphPath),
+      InstanceMethod("textPath", &CairoContext::TextPath),
       InstanceMethod("relCurveTo", &CairoContext::RelCurveTo),
       InstanceMethod("relLineTo", &CairoContext::RelLineTo),
       InstanceMethod("relMoveTo", &CairoContext::RelMoveTo),
@@ -354,9 +355,9 @@ CairoContext::SetSourceRgba(const Napi::CallbackInfo& info)
     return info.This();
   }
   double r = info[0].As<Napi::Number>();
-  double g = info[0].As<Napi::Number>();
-  double b = info[0].As<Napi::Number>();
-  double a = info[0].As<Napi::Number>();
+  double g = info[1].As<Napi::Number>();
+  double b = info[2].As<Napi::Number>();
+  double a = info[3].As<Napi::Number>();
   cairo_set_source_rgba(this->context_, r, g, b, a);
   return info.This();
 }
@@ -483,7 +484,7 @@ CairoContext::GetDash(const Napi::CallbackInfo& info)
   Napi::Float64Array dashes = Napi::Float64Array::New(env, count);
   double offset;
   cairo_get_dash(this->context_, dashes.Data(), &offset);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("dashes", dashes);
   result.Set("offset", Napi::Number::New(env, offset));
   return result;
@@ -697,7 +698,7 @@ CairoContext::ClipExtents(const Napi::CallbackInfo& info)
   }
   double x1, y1, x2, y2;
   cairo_clip_extents(this->context_, &x1, &y1, &x2, &y2);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x1", Napi::Number::New(env, x1));
   result.Set("y1", Napi::Number::New(env, y1));
   result.Set("x2", Napi::Number::New(env, x2));
@@ -779,7 +780,7 @@ CairoContext::FillExtents(const Napi::CallbackInfo& info)
   }
   double x1, y1, x2, y2;
   cairo_fill_extents(this->context_, &x1, &y1, &x2, &y2);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x1", Napi::Number::New(env, x1));
   result.Set("y1", Napi::Number::New(env, y1));
   result.Set("x2", Napi::Number::New(env, x2));
@@ -897,7 +898,7 @@ CairoContext::StrokeExtents(const Napi::CallbackInfo& info)
   }
   double x1, y1, x2, y2;
   cairo_stroke_extents(this->context_, &x1, &y1, &x2, &y2);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x1", Napi::Number::New(env, x1));
   result.Set("y1", Napi::Number::New(env, y1));
   result.Set("x2", Napi::Number::New(env, x2));
@@ -1216,6 +1217,21 @@ CairoContext::GlyphPath(const Napi::CallbackInfo& info)
 }
 
 Napi::Value
+CairoContext::TextPath(const Napi::CallbackInfo& info)
+{
+  Napi::Env env = info.Env();
+  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+    return info.This();
+  }
+  if (!ParamIsString(env, "text", info[0])) {
+    return info.This();
+  }
+  string text = info[0].As<Napi::String>();
+  cairo_text_path(this->context_, text.c_str());
+  return info.This();
+}
+
+Napi::Value
 CairoContext::RelCurveTo(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
@@ -1283,7 +1299,7 @@ CairoContext::PathExtents(const Napi::CallbackInfo& info)
   }
   double x1, y1, x2, y2;
   cairo_path_extents(this->context_, &x1, &y1, &x2, &y2);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x1", Napi::Number::New(env, x1));
   result.Set("y1", Napi::Number::New(env, y1));
   result.Set("x2", Napi::Number::New(env, x2));
@@ -1379,8 +1395,8 @@ CairoContext::GetMatrix(const Napi::CallbackInfo& info)
   }
   cairo_matrix_t matrix;
   cairo_get_matrix(this->context_, &matrix);
-  Napi::Object result;
-  MatrixToObject(env, matrix, &result);
+  Napi::Object result = Napi::Object::New(env);
+  MatrixToObject(env, &matrix, &result);
   return result;
 }
 
@@ -1408,7 +1424,7 @@ CairoContext::UserToDevice(const Napi::CallbackInfo& info)
   double x = info[0].As<Napi::Number>();
   double y = info[1].As<Napi::Number>();
   cairo_user_to_device(this->context_, &x, &y);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x", Napi::Number::New(env, x));
   result.Set("y", Napi::Number::New(env, y));
   return result;
@@ -1428,7 +1444,7 @@ CairoContext::UserToDeviceDistance(const Napi::CallbackInfo& info)
   double dx = info[0].As<Napi::Number>();
   double dy = info[1].As<Napi::Number>();
   cairo_user_to_device_distance(this->context_, &dx, &dy);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("dx", Napi::Number::New(env, dx));
   result.Set("dy", Napi::Number::New(env, dy));
   return result;
@@ -1447,7 +1463,7 @@ CairoContext::DeviceToUser(const Napi::CallbackInfo& info)
   double x = info[0].As<Napi::Number>();
   double y = info[1].As<Napi::Number>();
   cairo_device_to_user(this->context_, &x, &y);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x", Napi::Number::New(env, x));
   result.Set("y", Napi::Number::New(env, y));
   return result;
@@ -1466,7 +1482,7 @@ CairoContext::DeviceToUserDistance(const Napi::CallbackInfo& info)
   }
   double dx = info[0].As<Napi::Number>();
   double dy = info[1].As<Napi::Number>();
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("dx", Napi::Number::New(env, dx));
   result.Set("dy", Napi::Number::New(env, dy));
   return result;
@@ -1532,8 +1548,8 @@ CairoContext::GetFontMatrix(const Napi::CallbackInfo& info)
   }
   cairo_matrix_t matrix;
   cairo_get_font_matrix(this->context_, &matrix);
-  Napi::Object result;
-  MatrixToObject(env, matrix, &result);
+  Napi::Object result = Napi::Object::New(env);
+  MatrixToObject(env, &matrix, &result);
   return result;
 }
 
@@ -1681,8 +1697,8 @@ CairoContext::FontExtents(const Napi::CallbackInfo& info)
   }
   cairo_font_extents_t extents;
   cairo_font_extents(this->context_, &extents);
-  Napi::Object result;
-  FontExtentsToObject(env, extents, &result);
+  Napi::Object result = Napi::Object::New(env);
+  FontExtentsToObject(env, &extents, &result);
   return result;
 }
 
@@ -1697,7 +1713,7 @@ CairoContext::TextExtents(const Napi::CallbackInfo& info)
   string text = info[0].As<Napi::String>();
   cairo_text_extents_t extents;
   cairo_text_extents(this->context_, text.c_str(), &extents);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   TextExtentsToObject(env, &extents, &result);
   return result;
 }
@@ -1722,7 +1738,7 @@ CairoContext::GlyphExtents(const Napi::CallbackInfo& info)
   }
   cairo_text_extents_t extents;
   cairo_glyph_extents(this->context_, glyphs.data(), glyphs.size(), &extents);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   TextExtentsToObject(env, &extents, &result);
   return result;
 }

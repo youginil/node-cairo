@@ -1,5 +1,6 @@
 #include "node-cairo-context.h"
 #include "node-cairo-device.h"
+#include "node-cairo-enum.h"
 #include "node-cairo-font-face.h"
 #include "node-cairo-font-options.h"
 #include "node-cairo-path.h"
@@ -13,6 +14,7 @@ InitAll(Napi::Env env, Napi::Object exports)
 {
   CairoContext::Init(env, exports);
   CairoDevice::Init(env, exports);
+  InitEnums(env, exports);
   CairoFontFace::Init(env, exports);
   CairoFontOptions::Init(env, exports);
   CairoPath::Init(env, exports);

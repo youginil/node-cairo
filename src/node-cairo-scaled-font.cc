@@ -158,8 +158,8 @@ CairoScaledFont::Extents(const Napi::CallbackInfo& info)
   }
   cairo_font_extents_t extents;
   cairo_scaled_font_extents(this->scaledFont_, &extents);
-  Napi::Object result;
-  FontExtentsToObject(env, extents, &result);
+  Napi::Object result = Napi::Object::New(env);
+  FontExtentsToObject(env, &extents, &result);
   return result;
 }
 
@@ -176,7 +176,7 @@ CairoScaledFont::TextExtents(const Napi::CallbackInfo& info)
   string text = info[0].As<Napi::String>();
   cairo_text_extents_t extents;
   cairo_scaled_font_text_extents(this->scaledFont_, text.c_str(), &extents);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   TextExtentsToObject(env, &extents, &result);
   return result;
 }
@@ -201,7 +201,7 @@ CairoScaledFont::GlyphExtents(const Napi::CallbackInfo& info)
   cairo_text_extents_t extents;
   cairo_scaled_font_glyph_extents(
     this->scaledFont_, glyphs.data(), glyphs.size(), &extents);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   TextExtentsToObject(env, &extents, &result);
   return result;
 }
@@ -239,11 +239,11 @@ CairoScaledFont::TextToGlyphs(const Napi::CallbackInfo& info)
     ThrowStatusErrorAsJavaScriptException(
       env, "Fail to text to glyphs.", status);
   }
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   Napi::Array glyphArr;
   for (int i = 0; i < glyphsNum; i++) {
-    Napi::Object g;
-    GlyphToObject(env, *glyphs[i], &g);
+    Napi::Object g = Napi::Object::New(env);
+    GlyphToObject(env, glyphs[i], &g);
     glyphArr.Set(i, g);
   }
   result.Set("glyphs", glyphArr);
@@ -252,8 +252,8 @@ CairoScaledFont::TextToGlyphs(const Napi::CallbackInfo& info)
   } else {
     Napi::Array clusterArr;
     for (int i = 0; i < *clustersNum; i++) {
-      Napi::Object c;
-      TextClusterToObject(env, clusters[i], &c);
+      Napi::Object c = Napi::Object::New(env);
+      TextClusterToObject(env, &clusters[i], &c);
       clusterArr.Set(i, c);
     }
     result.Set("clusters", clusterArr);
@@ -306,8 +306,8 @@ CairoScaledFont::GetFontMatrix(const Napi::CallbackInfo& info)
   }
   cairo_matrix_t matrix;
   cairo_scaled_font_get_font_matrix(this->scaledFont_, &matrix);
-  Napi::Object result;
-  MatrixToObject(env, matrix, &result);
+  Napi::Object result = Napi::Object::New(env);
+  MatrixToObject(env, &matrix, &result);
   return result;
 }
 
@@ -320,8 +320,8 @@ CairoScaledFont::GetCtm(const Napi::CallbackInfo& info)
   }
   cairo_matrix_t matrix;
   cairo_scaled_font_get_ctm(this->scaledFont_, &matrix);
-  Napi::Object result;
-  MatrixToObject(env, matrix, &result);
+  Napi::Object result = Napi::Object::New(env);
+  MatrixToObject(env, &matrix, &result);
   return result;
 }
 
@@ -334,8 +334,8 @@ CairoScaledFont::GetScaleMatrix(const Napi::CallbackInfo& info)
   }
   cairo_matrix_t matrix;
   cairo_scaled_font_get_scale_matrix(this->scaledFont_, &matrix);
-  Napi::Object result;
-  MatrixToObject(env, matrix, &result);
+  Napi::Object result = Napi::Object::New(env);
+  MatrixToObject(env, &matrix, &result);
   return result;
 }
 

@@ -428,7 +428,7 @@ CairoSurface::GetDeviceOffset(const Napi::CallbackInfo& info)
   }
   double x, y;
   cairo_surface_get_device_offset(this->surface_, &x, &y);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x", Napi::Number::New(env, x));
   result.Set("y", Napi::Number::New(env, y));
   return result;
@@ -443,7 +443,7 @@ CairoSurface::GetDeviceScale(const Napi::CallbackInfo& info)
   }
   double x, y;
   cairo_surface_get_device_scale(this->surface_, &x, &y);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x", Napi::Number::New(env, x));
   result.Set("y", Napi::Number::New(env, y));
   return result;
@@ -492,7 +492,7 @@ CairoSurface::GetFallbackResolution(const Napi::CallbackInfo& info)
   }
   double x, y;
   cairo_surface_get_fallback_resolution(this->surface_, &x, &y);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x", Napi::Number::New(env, x));
   result.Set("y", Napi::Number::New(env, y));
   return result;
@@ -1126,7 +1126,7 @@ CairoSurface::RecordingSurfaceInkExtents(const Napi::CallbackInfo& info)
   }
   double x, y, w, h;
   cairo_recording_surface_ink_extents(this->surface_, &x, &y, &w, &h);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x", Napi::Number::New(env, x));
   result.Set("y", Napi::Number::New(env, y));
   result.Set("width", Napi::Number::New(env, w));
@@ -1147,8 +1147,8 @@ CairoSurface::RecordingSurfaceGetExtents(const Napi::CallbackInfo& info)
   if (!success) {
     return env.Null();
   }
-  Napi::Object result;
-  RectangleToObject(env, rect, &result);
+  Napi::Object result = Napi::Object::New(env);
+  RectangleToObject(env, &rect, &result);
   return result;
 }
 

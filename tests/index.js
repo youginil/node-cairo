@@ -1,7 +1,11 @@
-const cairo = require('../index.debug');
+const {CairoSurface, CairoContext, CairoPattern} = require('../index');
 
-const s1 = cairo.CairoSurface.imageSurfaceCreate(0, 100, 100);
-const ctx = cairo.CairoContext.create(s1);
-ctx.rectangle(10, 10, 20, 20);
-ctx.stroke();
-s1.writeToPng("./hello.png");
+const s = CairoSurface.imageSurfaceCreate(0, 500, 500);
+const ctx = CairoContext.create(s);
+
+const s1 = CairoSurface.imageSurfaceCreateFromPng('./apple.png');
+const pattern = CairoPattern.createForSurface(s1);
+ctx.setSource(pattern);
+ctx.paint();
+
+s.writeToPng("./hello.png");

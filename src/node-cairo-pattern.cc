@@ -187,7 +187,7 @@ CairoPattern::GetColorStopRgba(const Napi::CallbackInfo& info)
   double offset, red, green, blue, alpha;
   cairo_pattern_get_color_stop_rgba(
     this->pattern_, index, &offset, &red, &green, &blue, &alpha);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("offset", Napi::Number::New(env, offset));
   result.Set("r", Napi::Number::New(env, red));
   result.Set("g", Napi::Number::New(env, green));
@@ -253,7 +253,7 @@ CairoPattern::GetRgba(const Napi::CallbackInfo& info)
   }
   double r, g, b, a;
   cairo_pattern_get_rgba(this->pattern_, &r, &g, &b, &a);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("r", Napi::Number::New(env, r));
   result.Set("g", Napi::Number::New(env, g));
   result.Set("b", Napi::Number::New(env, b));
@@ -341,7 +341,7 @@ CairoPattern::GetLinearPoints(const Napi::CallbackInfo& info)
   if (x0 == nullptr) {
     return env.Null();
   }
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x0", Napi::Number::New(env, *x0));
   result.Set("y0", Napi::Number::New(env, *y0));
   result.Set("x1", Napi::Number::New(env, *x1));
@@ -397,7 +397,7 @@ CairoPattern::GetRadialCircles(const Napi::CallbackInfo& info)
   if (x0 == nullptr) {
     return env.Null();
   }
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x0", Napi::Number::New(env, *x0));
   result.Set("y0", Napi::Number::New(env, *y0));
   result.Set("r0", Napi::Number::New(env, *r0));
@@ -661,7 +661,7 @@ CairoPattern::MeshPatternGetControlPoint(const Napi::CallbackInfo& info)
     return ThrowStatusErrorAsJavaScriptException(
       env, "Fail to get control point.", status);
   }
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x", Napi::Number::New(env, *x));
   result.Set("y", Napi::Number::New(env, *y));
   return result;
@@ -688,7 +688,7 @@ CairoPattern::MeshPatternGetCornerColorRgba(const Napi::CallbackInfo& info)
     return ThrowStatusErrorAsJavaScriptException(
       env, "Fail to get corner color.", status);
   }
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("r", Napi::Number::New(env, *r));
   result.Set("g", Napi::Number::New(env, *g));
   result.Set("b", Napi::Number::New(env, *b));
@@ -809,8 +809,8 @@ CairoPattern::GetMatrix(const Napi::CallbackInfo& info)
   }
   cairo_matrix_t matrix;
   cairo_pattern_get_matrix(this->pattern_, &matrix);
-  Napi::Object result;
-  MatrixToObject(env, matrix, &result);
+  Napi::Object result = Napi::Object::New(env);
+  MatrixToObject(env, &matrix, &result);
   return result;
 }
 

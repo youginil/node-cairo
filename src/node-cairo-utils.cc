@@ -242,13 +242,13 @@ ObjectToRectangle(const Napi::Object& obj, cairo_rectangle_t* rect)
 
 void
 RectangleToObject(const Napi::Env& env,
-                  const cairo_rectangle_t& rect,
+                  cairo_rectangle_t* rect,
                   Napi::Object* obj)
 {
-  obj->Set("x", Napi::Number::New(env, rect.x));
-  obj->Set("y", Napi::Number::New(env, rect.y));
-  obj->Set("width", Napi::Number::New(env, rect.width));
-  obj->Set("height", Napi::Number::New(env, rect.height));
+  obj->Set("x", Napi::Number::New(env, rect->x));
+  obj->Set("y", Napi::Number::New(env, rect->y));
+  obj->Set("width", Napi::Number::New(env, rect->width));
+  obj->Set("height", Napi::Number::New(env, rect->height));
 }
 
 bool
@@ -311,16 +311,14 @@ ObjectToMatrix(const Napi::Object& obj, cairo_matrix_t* matrix)
 }
 
 void
-MatrixToObject(const Napi::Env& env,
-               const cairo_matrix_t& matrix,
-               Napi::Object* obj)
+MatrixToObject(const Napi::Env& env, cairo_matrix_t* matrix, Napi::Object* obj)
 {
-  obj->Set("xx", Napi::Number::New(env, matrix.xx));
-  obj->Set("yx", Napi::Number::New(env, matrix.yx));
-  obj->Set("xy", Napi::Number::New(env, matrix.xy));
-  obj->Set("yy", Napi::Number::New(env, matrix.yy));
-  obj->Set("x0", Napi::Number::New(env, matrix.x0));
-  obj->Set("y0", Napi::Number::New(env, matrix.y0));
+  obj->Set("xx", Napi::Number::New(env, matrix->xx));
+  obj->Set("yx", Napi::Number::New(env, matrix->yx));
+  obj->Set("xy", Napi::Number::New(env, matrix->xy));
+  obj->Set("yy", Napi::Number::New(env, matrix->yy));
+  obj->Set("x0", Napi::Number::New(env, matrix->x0));
+  obj->Set("y0", Napi::Number::New(env, matrix->y0));
 }
 
 bool
@@ -354,14 +352,14 @@ ObjectToFontExtents(const Napi::Object& obj, cairo_font_extents_t* extents)
 
 void
 FontExtentsToObject(const Napi::Env& env,
-                    const cairo_font_extents_t& extents,
+                    cairo_font_extents_t* extents,
                     Napi::Object* obj)
 {
-  obj->Set("ascent", Napi::Number::New(env, extents.ascent));
-  obj->Set("descent", Napi::Number::New(env, extents.descent));
-  obj->Set("height", Napi::Number::New(env, extents.height));
-  obj->Set("xAdvance", Napi::Number::New(env, extents.max_x_advance));
-  obj->Set("yAdvance", Napi::Number::New(env, extents.max_y_advance));
+  obj->Set("ascent", Napi::Number::New(env, extents->ascent));
+  obj->Set("descent", Napi::Number::New(env, extents->descent));
+  obj->Set("height", Napi::Number::New(env, extents->height));
+  obj->Set("xAdvance", Napi::Number::New(env, extents->max_x_advance));
+  obj->Set("yAdvance", Napi::Number::New(env, extents->max_y_advance));
 }
 
 bool
@@ -396,15 +394,15 @@ ObjectToTextExtents(const Napi::Object& obj, cairo_text_extents_t* extents)
 
 void
 TextExtentsToObject(const Napi::Env& env,
-                    const cairo_text_extents_t& extents,
+                    cairo_text_extents_t* extents,
                     Napi::Object* obj)
 {
-  obj->Set("xBearing", Napi::Number::New(env, extents.x_bearing));
-  obj->Set("yBearing", Napi::Number::New(env, extents.y_bearing));
-  obj->Set("width", Napi::Number::New(env, extents.width));
-  obj->Set("height", Napi::Number::New(env, extents.height));
-  obj->Set("xAdvance", Napi::Number::New(env, extents.x_advance));
-  obj->Set("yAdvance", Napi::Number::New(env, extents.y_advance));
+  obj->Set("xBearing", Napi::Number::New(env, extents->x_bearing));
+  obj->Set("yBearing", Napi::Number::New(env, extents->y_bearing));
+  obj->Set("width", Napi::Number::New(env, extents->width));
+  obj->Set("height", Napi::Number::New(env, extents->height));
+  obj->Set("xAdvance", Napi::Number::New(env, extents->x_advance));
+  obj->Set("yAdvance", Napi::Number::New(env, extents->y_advance));
 }
 
 void
@@ -416,20 +414,18 @@ ObjectToGlyph(const Napi::Object& obj, cairo_glyph_t* glyph)
 }
 
 void
-GlyphToObject(const Napi::Env& env,
-              const cairo_glyph_t& glyph,
-              Napi::Object* obj)
+GlyphToObject(const Napi::Env& env, cairo_glyph_t* glyph, Napi::Object* obj)
 {
-  obj->Set("index", Napi::Number::New(env, glyph.index));
-  obj->Set("x", Napi::Number::New(env, glyph.x));
-  obj->Set("y", Napi::Number::New(env, glyph.y));
+  obj->Set("index", Napi::Number::New(env, glyph->index));
+  obj->Set("x", Napi::Number::New(env, glyph->x));
+  obj->Set("y", Napi::Number::New(env, glyph->y));
 }
 
 void
 TextClusterToObject(const Napi::Env& env,
-                    const cairo_text_cluster_t& cluster,
+                    cairo_text_cluster_t* cluster,
                     Napi::Object* obj)
 {
-  obj->Set("bytes", Napi::Number::New(env, cluster.num_bytes));
-  obj->Set("glyphs", Napi::Number::New(env, cluster.num_glyphs));
+  obj->Set("bytes", Napi::Number::New(env, cluster->num_bytes));
+  obj->Set("glyphs", Napi::Number::New(env, cluster->num_glyphs));
 }

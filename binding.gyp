@@ -7,6 +7,7 @@
                 "src/node-cairo-utils.cc",
                 "src/node-cairo-context.cc",
                 "src/node-cairo-device.cc",
+                "src/node-cairo-enum.cc",
                 "src/node-cairo-font-face.cc",
                 "src/node-cairo-font-options.cc",
                 "src/node-cairo-path.cc",

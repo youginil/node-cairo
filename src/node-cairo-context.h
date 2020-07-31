@@ -93,6 +93,7 @@ public:
   Napi::Value MoveTo(const Napi::CallbackInfo& info);
   Napi::Value Rectangle(const Napi::CallbackInfo& info);
   Napi::Value GlyphPath(const Napi::CallbackInfo& info);
+  Napi::Value TextPath(const Napi::CallbackInfo& info);
   Napi::Value RelCurveTo(const Napi::CallbackInfo& info);
   Napi::Value RelLineTo(const Napi::CallbackInfo& info);
   Napi::Value RelMoveTo(const Napi::CallbackInfo& info);

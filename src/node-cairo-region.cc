@@ -212,7 +212,7 @@ CairoRegion::GetExtents(const Napi::CallbackInfo& info)
   }
   cairo_rectangle_int_t extents;
   cairo_region_get_extents(this->region_, &extents);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x", Napi::Number::New(env, extents.x));
   result.Set("y", Napi::Number::New(env, extents.y));
   result.Set("width", Napi::Number::New(env, extents.width));
@@ -244,7 +244,7 @@ CairoRegion::GetRectangle(const Napi::CallbackInfo& info)
   int index = info[0].As<Napi::Number>();
   cairo_rectangle_int_t rect;
   cairo_region_get_rectangle(this->region_, index, &rect);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   result.Set("x", Napi::Number::New(env, rect.x));
   result.Set("y", Napi::Number::New(env, rect.y));
   result.Set("width", Napi::Number::New(env, rect.width));

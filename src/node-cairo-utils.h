@@ -1,7 +1,7 @@
 #ifndef __NODE_CAIRO_UTILS_H__
 #define __NODE_CAIRO_UTILS_H__
 
-#include <cairo.h>
+#include "cairo.h"
 #include <napi.h>
 
 Napi::Value
@@ -70,7 +70,7 @@ ObjectToRectangle(const Napi::Object& obj, cairo_rectangle_t* rect);
 
 void
 RectangleToObject(const Napi::Env& env,
-                  const cairo_rectangle_t& rect,
+                  const cairo_rectangle_t* rect,
                   Napi::Object* obj);
 
 bool
@@ -86,9 +86,7 @@ void
 ObjectToMatrix(const Napi::Object& obj, cairo_matrix_t* matrix);
 
 void
-MatrixToObject(const Napi::Env& env,
-               const cairo_matrix_t& matrix,
-               Napi::Object* obj);
+MatrixToObject(const Napi::Env& env, cairo_matrix_t* matrix, Napi::Object* obj);
 
 bool
 ParamIsFontExtents(const Napi::Env& env,
@@ -100,7 +98,7 @@ ObjectToFontExtents(const Napi::Object& obj, cairo_font_extents_t* extents);
 
 void
 FontExtentsToObject(const Napi::Env& env,
-                    const cairo_font_extents_t& extents,
+                    cairo_font_extents_t* extents,
                     Napi::Object* obj);
 
 bool
@@ -113,20 +111,18 @@ ObjectToTextExtents(const Napi::Object& obj, cairo_text_extents_t* extents);
 
 void
 TextExtentsToObject(const Napi::Env& env,
-                    const cairo_text_extents_t* extents,
+                    cairo_text_extents_t* extents,
                     Napi::Object* obj);
 
 void
 ObjectToGlyph(const Napi::Object& obj, cairo_glyph_t* glyph);
 
 void
-GlyphToObject(const Napi::Env& env,
-              const cairo_glyph_t& glyph,
-              Napi::Object* obj);
+GlyphToObject(const Napi::Env& env, cairo_glyph_t* glyph, Napi::Object* obj);
 
 void
 TextClusterToObject(const Napi::Env& env,
-                    const cairo_text_cluster_t& cluster,
+                    cairo_text_cluster_t* cluster,
                     Napi::Object* obj);
 
 #endif

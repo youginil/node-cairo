@@ -387,6 +387,7 @@ export class CairoContext {
   copyPathFlat(): CairoPath;
   appendPath(path: CairoPath): this;
   hasCurrentPoint(): boolean;
+  newPath(): this;
   newSubPath(): this;
   closePath(): this;
   arc(x: number, y: number, radius: number, startAngle: number, endAngle: number): this;
@@ -396,6 +397,7 @@ export class CairoContext {
   moveTo(x: number, y: number): this;
   rectangle(x: number, y: number, width: number, height: number): this;
   glyphPath(glyphs: CairoGlyph[]): this;
+  textPath(text: string): this;
   relCurveTo(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number): this;
   relLineTo(x: number, y: number): this;
   relMoveTo(x: number, y: number): this;
