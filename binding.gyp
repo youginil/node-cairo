@@ -10,6 +10,7 @@
                 "src/node-cairo-enum.cc",
                 "src/node-cairo-font-face.cc",
                 "src/node-cairo-font-options.cc",
+                "src/node-cairo-matrix.cc",
                 "src/node-cairo-path.cc",
                 "src/node-cairo-pattern.cc",
                 "src/node-cairo-region.cc",

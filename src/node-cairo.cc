@@ -3,6 +3,7 @@
 #include "node-cairo-enum.h"
 #include "node-cairo-font-face.h"
 #include "node-cairo-font-options.h"
+#include "node-cairo-matrix.h"
 #include "node-cairo-path.h"
 #include "node-cairo-pattern.h"
 #include "node-cairo-region.h"
@@ -17,6 +18,7 @@ InitAll(Napi::Env env, Napi::Object exports)
   InitEnums(env, exports);
   CairoFontFace::Init(env, exports);
   CairoFontOptions::Init(env, exports);
+  InitMatrix(env, exports);
   CairoPath::Init(env, exports);
   CairoPattern::Init(env, exports);
   CairoRegion::Init(env, exports);

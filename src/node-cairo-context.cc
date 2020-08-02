@@ -153,6 +153,7 @@ CairoContext::NewInstance(cairo_t* context)
   Napi::Object obj = contextConstructor->New({});
   CairoContext* ctx = Napi::ObjectWrap<CairoContext>::Unwrap(obj);
   ctx->SetContext(context);
+  cairo_reference(context);
   return obj;
 }
 

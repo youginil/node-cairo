@@ -62,6 +62,7 @@ CairoRegion::NewInstance(cairo_region_t* region)
   Napi::Object obj = regionConstructor->New({});
   CairoRegion* r = Napi::ObjectWrap<CairoRegion>::Unwrap(obj);
   r->SetRegion(region);
+  cairo_region_reference(region);
   return obj;
 }
 

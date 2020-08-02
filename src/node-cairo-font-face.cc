@@ -53,6 +53,7 @@ CairoFontFace::NewInstance(cairo_font_face_t* fontFace)
   Napi::Object obj = fontFaceConstructor->New({});
   CairoFontFace* ff = Napi::ObjectWrap<CairoFontFace>::Unwrap(obj);
   ff->SetFontFace(fontFace);
+  cairo_font_face_reference(fontFace);
   return obj;
 }
 

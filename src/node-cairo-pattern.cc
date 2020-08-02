@@ -99,6 +99,7 @@ CairoPattern::NewInstance(cairo_pattern_t* pattern)
   Napi::Object obj = patternConstructor->New({});
   CairoPattern* p = Napi::ObjectWrap<CairoPattern>::Unwrap(obj);
   p->SetPattern(pattern);
+  cairo_pattern_reference(pattern);
   return obj;
 }
 

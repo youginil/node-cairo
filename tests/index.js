@@ -1,11 +1,11 @@
-const {CairoSurface, CairoContext, CairoPattern} = require('../index');
+const {CairoSurface, CairoContext, CairoPattern, matrixInit, matrixTranslate} = require('../index.debug');
 
 const s = CairoSurface.imageSurfaceCreate(0, 500, 500);
 const ctx = CairoContext.create(s);
 
-const s1 = CairoSurface.imageSurfaceCreateFromPng('./apple.png');
-const pattern = CairoPattern.createForSurface(s1);
-ctx.setSource(pattern);
-ctx.paint();
+// s.writeToPng("./hello.png");
 
-s.writeToPng("./hello.png");
+const matrix = matrixInit(100, 0, 0, 100, 10, 10);
+console.log(matrix, matrixTranslate);
+const result = matrixTranslate(matrix, 0.5, 0.5);
+console.log(matrix, result);

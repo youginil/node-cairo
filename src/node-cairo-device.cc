@@ -72,6 +72,7 @@ CairoDevice::NewInstance(cairo_device_t* device)
   Napi::Object obj = deviceConstructor->New({});
   CairoDevice* d = Napi::ObjectWrap<CairoDevice>::Unwrap(obj);
   d->SetDevice(device);
+  cairo_device_reference(device);
   return obj;
 }
 

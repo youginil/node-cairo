@@ -58,6 +58,7 @@ CairoScaledFont::NewInstance(cairo_scaled_font_t* scaledFont)
   Napi::Object obj = scaledFontConstructor->New({});
   CairoScaledFont* sf = Napi::ObjectWrap<CairoScaledFont>::Unwrap(obj);
   sf->SetScaledFont(scaledFont);
+  cairo_scaled_font_reference(scaledFont);
   return obj;
 }
 

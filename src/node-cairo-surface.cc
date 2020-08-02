@@ -149,6 +149,7 @@ CairoSurface::NewInstance(cairo_surface_t* surface)
   Napi::Object obj = surfaceConstructor->New({});
   CairoSurface* s = Napi::ObjectWrap<CairoSurface>::Unwrap(obj);
   s->SetSurface(surface);
+  cairo_surface_reference(surface);
   return obj;
 }
 

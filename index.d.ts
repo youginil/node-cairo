@@ -623,3 +623,16 @@ export class CairoDevice {
   scriptSetMode(mode: CairoScriptMode): this;
   scriptWriteComment(comment: string): this;
 }
+
+export function matrixInit(xx: number, yx: number, xy: number, yy: number, x0: number, y0: number): CairoMatrix;
+export function matrixInitIdentity(matrix: CairoMatrix): void;
+export function matrixInitTranslate(tx: number, ty: number): CairoMatrix;
+export function matrixInitScale(sx: number, sy: number): CairoMatrix;
+export function matrixInitRotate(angle: number): CairoMatrix;
+export function matrixTranslate(matrix: CairoMatrix, tx: number, ty: number): void;
+export function matrixScale(matrix: CairoMatrix, sx: number, sy: number): void;
+export function matrixRotate(matrix: CairoMatrix, angle: number): void;
+export function matrixInvert(matrix: CairoMatrix): void;
+export function matrixMultiply(a: CairoMatrix, b: CairoMatrix): CairoMatrix;
+export function matrixTransformDistance(matrix: CairoMatrix, dx: number, dy: number): [number, number];
+export function matrixTransformPoint(matrix: CairoMatrix, x: number, y: number): [number, number];
