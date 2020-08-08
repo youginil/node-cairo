@@ -65,9 +65,6 @@ Napi::Value
 CairoPath::Destroy(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   if (this->path_) {
     cairo_path_destroy(this->path_);
     this->path_ = nullptr;

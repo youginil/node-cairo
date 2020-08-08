@@ -35,7 +35,7 @@ ThrowStatusErrorAsJavaScriptException(const Napi::Env& env,
 }
 
 bool
-CheckArgumentsNumber(const Napi::Env& env, int argsNum, int n)
+CheckArgsNumber(int argsNum, int n, const Napi::Env& env)
 {
   if (argsNum != n) {
     ThrowErrorAsJavaScriptException(env, "Wrong number of arguments.");
@@ -45,14 +45,14 @@ CheckArgumentsNumber(const Napi::Env& env, int argsNum, int n)
 }
 
 bool
-ParamIsNumber(const Napi::Env& env, const char* name, const Napi::Value& v)
+ParamIsNumber(const Napi::Value& v, const char* name, const Napi::Env& env)
 {
-  if (!v.IsNumber()) {
-    ThrowTypeErrorAsJavaScriptException(
-      env, (string(name) + string(" is not a number.")).c_str());
-    return false;
+  if (v.IsNumber()) {
+    return true;
   }
-  return true;
+  ThrowTypeErrorAsJavaScriptException(
+    env, (string(name) + string(" is not a number.")).c_str());
+  return false;
 }
 
 /*
@@ -63,7 +63,7 @@ CheckNumberGreaterThan(const Napi::Env& env,
                        int n,
                        bool equal)
 {
-  if (!ParamIsNumber(env, name, v)) {
+  if (!ParamIsNumber( v,  name, env)) {
     return false;
   }
   int value = v.As<Napi::Number>();
@@ -94,7 +94,7 @@ CheckNumberLessThan(const Napi::Env& env,
                     int n,
                     bool equal)
 {
-  if (!ParamIsNumber(env, name, v)) {
+  if (!ParamIsNumber( v,  name, env)) {
     return false;
   }
   int value = v.As<Napi::Number>();
@@ -120,25 +120,36 @@ CheckNumberLessThan(const Napi::Env& env,
 */
 
 bool
-ParamIsObject(const Napi::Env& env, const char* name, const Napi::Value& v)
+ParamIsObject(const Napi::Value& v, const char* name, const Napi::Env& env)
 {
-  if (!v.As<Napi::Object>()) {
-    ThrowTypeErrorAsJavaScriptException(
-      env, (string(name) + string(" is not object.")).c_str());
-    return false;
+  if (v.IsObject()) {
+    return true;
   }
-  return true;
+  ThrowTypeErrorAsJavaScriptException(
+    env, (string(name) + string(" is not object.")).c_str());
+  return false;
 }
 
 bool
-ParamIsString(const Napi::Env& env, const char* name, const Napi::Value& v)
+ParamIsBoolean(const Napi::Value& v, const char* name, const Napi::Env& env)
 {
-  if (!v.As<Napi::String>()) {
-    ThrowTypeErrorAsJavaScriptException(
-      env, (string(name) + string(" is not string.")).c_str());
-    return false;
+  if (v.IsBoolean()) {
+    return true;
   }
-  return true;
+  ThrowTypeErrorAsJavaScriptException(
+    env, (string(name) + string(" is not boolean.")).c_str());
+  return false;
+}
+
+bool
+ParamIsString(const Napi::Value& v, const char* name, const Napi::Env& env)
+{
+  if (v.IsString()) {
+    return true;
+  }
+  ThrowTypeErrorAsJavaScriptException(
+    env, (string(name) + string(" is not string.")).c_str());
+  return false;
 }
 
 bool
@@ -146,7 +157,7 @@ CheckNonBlankString(const Napi::Env& env,
                     const char* name,
                     const Napi::Value& v)
 {
-  if (!ParamIsString(env, name, v)) {
+  if (!ParamIsString(v, name, env)) {
     return false;
   }
   string str = v.As<Napi::String>();
@@ -159,43 +170,40 @@ CheckNonBlankString(const Napi::Env& env,
 }
 
 bool
-ParamIsFunction(const Napi::Env& env, const char* name, const Napi::Value& v)
+ParamIsFunction(const Napi::Value& v, const char* name, const Napi::Env& env)
 {
-  if (!v.IsFunction()) {
-    ThrowTypeErrorAsJavaScriptException(
-      env, (string(name) + string(" is not Function.")).c_str());
-    return false;
-  }
-  return true;
-}
-
-bool
-ParamIsArrayBuffer(const Napi::Env& env, const char* name, const Napi::Value& v)
-{
-  if (!v.IsArrayBuffer()) {
-    ThrowTypeErrorAsJavaScriptException(
-      env, (string(name) + string(" is not ArrayBuffer.")).c_str());
-    return false;
-  }
-  return true;
-}
-
-bool
-ParamIsRectangleInt(const Napi::Env& env,
-                    const char* name,
-                    const Napi::Value& v)
-{
-  if (!v.IsObject()) {
-    ThrowTypeErrorAsJavaScriptException(
-      env, (string("Invalid ") + string(name) + string(".")).c_str());
-    return false;
-  }
-  Napi::Object obj = v.As<Napi::Object>();
-  if (obj.HasOwnProperty("x") && obj.Get("x").IsBigInt() &&
-      obj.HasOwnProperty("y") && obj.Get("y").IsBigInt() &&
-      obj.HasOwnProperty("width") && obj.Get("width").IsBigInt() &&
-      obj.HasOwnProperty("height") && obj.Get("height").IsBigInt()) {
+  if (v.IsFunction()) {
     return true;
+  }
+  ThrowTypeErrorAsJavaScriptException(
+    env, (string(name) + string(" is not Function.")).c_str());
+  return false;
+}
+
+bool
+ParamIsArrayBuffer(const Napi::Value& v, const char* name, const Napi::Env& env)
+{
+  if (v.IsArrayBuffer()) {
+    return true;
+  }
+  ThrowTypeErrorAsJavaScriptException(
+    env, (string(name) + string(" is not ArrayBuffer.")).c_str());
+  return false;
+}
+
+bool
+ParamIsRectangleInt(const Napi::Value& v,
+                    const char* name,
+                    const Napi::Env& env)
+{
+  if (v.IsObject()) {
+    Napi::Object obj = v.As<Napi::Object>();
+    if (obj.HasOwnProperty("x") && obj.Get("x").IsBigInt() &&
+        obj.HasOwnProperty("y") && obj.Get("y").IsBigInt() &&
+        obj.HasOwnProperty("width") && obj.Get("width").IsBigInt() &&
+        obj.HasOwnProperty("height") && obj.Get("height").IsBigInt()) {
+      return true;
+    }
   }
   ThrowTypeErrorAsJavaScriptException(
     env, (string("Invalid ") + string(name) + string(".")).c_str());
@@ -212,19 +220,16 @@ ObjectToRectangleInt(const Napi::Object& obj, cairo_rectangle_int_t* rect)
 }
 
 bool
-ParamIsRectangle(const Napi::Env& env, const char* name, const Napi::Value& v)
+ParamIsRectangle(const Napi::Value& v, const char* name, const Napi::Env& env)
 {
-  if (!v.IsObject()) {
-    ThrowTypeErrorAsJavaScriptException(
-      env, (string("Invalid ") + string(name)).c_str());
-    return false;
-  }
-  Napi::Object obj = v.As<Napi::Object>();
-  if (obj.HasOwnProperty("x") && obj.Get("x").IsNumber() &&
-      obj.HasOwnProperty("y") && obj.Get("y").IsNumber() &&
-      obj.HasOwnProperty("width") && obj.Get("width").IsNumber() &&
-      obj.HasOwnProperty("height") && obj.Get("height").IsNumber()) {
-    return true;
+  if (v.IsObject()) {
+    Napi::Object obj = v.As<Napi::Object>();
+    if (obj.HasOwnProperty("x") && obj.Get("x").IsNumber() &&
+        obj.HasOwnProperty("y") && obj.Get("y").IsNumber() &&
+        obj.HasOwnProperty("width") && obj.Get("width").IsNumber() &&
+        obj.HasOwnProperty("height") && obj.Get("height").IsNumber()) {
+      return true;
+    }
   }
   ThrowTypeErrorAsJavaScriptException(
     env, (string("Invalid ") + string(name)).c_str());
@@ -270,29 +275,26 @@ CheckCairoFormatParameter(const Napi::Env& env, const Napi::Value& v)
 }
 
 bool
-ParamIsArray(const Napi::Env& env, const char* name, const Napi::Value& v)
+ParamIsArray(const Napi::Value& v, const char* name, const Napi::Env& env)
 {
-  if (!v.IsArray()) {
-    ThrowTypeErrorAsJavaScriptException(
-      env, (string("Invalid ") + string(name)).c_str());
-    return false;
+  if (v.IsArray()) {
+    return true;
   }
-  return true;
+  ThrowTypeErrorAsJavaScriptException(
+    env, (string("Invalid ") + string(name)).c_str());
+  return false;
 }
 
 bool
-ParamIsMatrix(const Napi::Env& env, const char* name, const Napi::Value& v)
+ParamIsMatrix(const Napi::Value& v, const char* name, const Napi::Env& env)
 {
-  if (!v.IsObject()) {
-    ThrowTypeErrorAsJavaScriptException(
-      env, (string("Invalid ") + string(name)).c_str());
-    return false;
-  }
-  Napi::Object obj = v.As<Napi::Object>();
-  if (obj.Get("xx").IsNumber() && obj.Get("yx").IsNumber() &&
-      obj.Get("xy").IsNumber() && obj.Get("yy").IsNumber() &&
-      obj.Get("x0").IsNumber() && obj.Get("y0").IsNumber()) {
-    return true;
+  if (v.IsObject()) {
+    Napi::Object obj = v.As<Napi::Object>();
+    if (obj.Get("xx").IsNumber() && obj.Get("yx").IsNumber() &&
+        obj.Get("xy").IsNumber() && obj.Get("yy").IsNumber() &&
+        obj.Get("x0").IsNumber() && obj.Get("y0").IsNumber()) {
+      return true;
+    }
   }
   ThrowTypeErrorAsJavaScriptException(
     env, (string("Invalid ") + string(name)).c_str());
@@ -322,18 +324,15 @@ MatrixToObject(const Napi::Env& env, cairo_matrix_t* matrix, Napi::Object* obj)
 }
 
 bool
-ParamIsFontExtents(const Napi::Env& env, const char* name, const Napi::Value& v)
+ParamIsFontExtents(const Napi::Value& v, const char* name, const Napi::Env& env)
 {
-  if (!v.IsObject()) {
-    ThrowTypeErrorAsJavaScriptException(
-      env, (string("Invalid ") + string(name)).c_str());
-    return false;
-  }
-  Napi::Object obj = v.As<Napi::Object>();
-  if (obj.Get("ascent").IsNumber() && obj.Get("descent").IsNumber() &&
-      obj.Get("height").IsNumber() && obj.Get("xAdvance") &&
-      obj.Get("yAdvance").IsNumber()) {
-    return true;
+  if (v.IsObject()) {
+    Napi::Object obj = v.As<Napi::Object>();
+    if (obj.Get("ascent").IsNumber() && obj.Get("descent").IsNumber() &&
+        obj.Get("height").IsNumber() && obj.Get("xAdvance") &&
+        obj.Get("yAdvance").IsNumber()) {
+      return true;
+    }
   }
   ThrowTypeErrorAsJavaScriptException(
     env, (string("Invalid ") + string(name)).c_str());
@@ -363,18 +362,15 @@ FontExtentsToObject(const Napi::Env& env,
 }
 
 bool
-ParamIsTextExtents(const Napi::Env& env, const char* name, const Napi::Value& v)
+ParamIsTextExtents(const Napi::Value& v, const char* name, const Napi::Env& env)
 {
-  if (!v.IsObject()) {
-    ThrowTypeErrorAsJavaScriptException(
-      env, (string("Invalid ") + string(name) + string(".")).c_str());
-    return false;
-  }
-  Napi::Object obj = v.As<Napi::Object>();
-  if (obj.Get("xBearing").IsNumber() && obj.Get("yBearing").IsNumber() &&
-      obj.Get("width").IsNumber() && obj.Get("height").IsNumber() &&
-      obj.Get("xAdvance").IsNumber() && obj.Get("yAdvance").IsNumber()) {
-    return true;
+  if (v.IsObject()) {
+    Napi::Object obj = v.As<Napi::Object>();
+    if (obj.Get("xBearing").IsNumber() && obj.Get("yBearing").IsNumber() &&
+        obj.Get("width").IsNumber() && obj.Get("height").IsNumber() &&
+        obj.Get("xAdvance").IsNumber() && obj.Get("yAdvance").IsNumber()) {
+      return true;
+    }
   }
   ThrowTypeErrorAsJavaScriptException(
     env, (string("Invalid ") + string(name) + string(".")).c_str());
@@ -428,4 +424,35 @@ TextClusterToObject(const Napi::Env& env,
 {
   obj->Set("bytes", Napi::Number::New(env, cluster->num_bytes));
   obj->Set("glyphs", Napi::Number::New(env, cluster->num_glyphs));
+}
+
+Napi::Value
+PangoLogAttrToValue(const Napi::Env& env, const PangoLogAttr* attr)
+{
+  int n = 0;
+  n |= attr->is_line_break << 12;
+  n |= attr->is_mandatory_break << 11;
+  n |= attr->is_char_break << 10;
+  n |= attr->is_white << 9;
+  n |= attr->is_cursor_position << 8;
+  n |= attr->is_word_start << 7;
+  n |= attr->is_word_end << 6;
+  n |= attr->is_sentence_boundary << 5;
+  n |= attr->is_sentence_start << 4;
+  n |= attr->is_sentence_end << 3;
+  n |= attr->backspace_deletes_character << 2;
+  n |= attr->is_expandable_space << 1;
+  n |= attr->is_word_boundary;
+  return Napi::Number::New(env, n);
+}
+
+void
+PangoRectangleToObject(const Napi::Env& env,
+                       PangoRectangle* rect,
+                       Napi::Object* obj)
+{
+  obj->Set("x", Napi::Number::New(env, rect->x));
+  obj->Set("y", Napi::Number::New(env, rect->y));
+  obj->Set("width", Napi::Number::New(env, rect->width));
+  obj->Set("height", Napi::Number::New(env, rect->height));
 }

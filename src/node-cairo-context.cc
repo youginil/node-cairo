@@ -180,7 +180,7 @@ Napi::Value
 CairoContext::Create(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   // target surface
@@ -196,10 +196,6 @@ CairoContext::Create(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::Reference(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_reference(this->context_);
   return info.This();
 }
@@ -207,10 +203,6 @@ CairoContext::Reference(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::Destroy(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   if (this->context_) {
     cairo_destroy(this->context_);
     this->context_ = nullptr;
@@ -222,9 +214,6 @@ Napi::Value
 CairoContext::Status(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_status_t status = cairo_status(this->context_);
   return Napi::Number::New(env, status);
 }
@@ -232,10 +221,6 @@ CairoContext::Status(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::Save(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_save(this->context_);
   return info.This();
 }
@@ -243,10 +228,6 @@ CairoContext::Save(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::Restore(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_restore(this->context_);
   return info.This();
 }
@@ -254,10 +235,6 @@ CairoContext::Restore(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::GetTarget(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_surface_t* s = cairo_get_target(this->context_);
   return CairoSurface::NewInstance(s);
 }
@@ -265,10 +242,6 @@ CairoContext::GetTarget(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::PushGroup(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_push_group(this->context_);
   return info.This();
 }
@@ -277,10 +250,10 @@ Napi::Value
 CairoContext::PushGroupWithContent(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "content", info[0])) {
+  if (!ParamIsNumber(info[0], "content", env)) {
     info.This();
   }
   int content = info[0].As<Napi::Number>();
@@ -291,10 +264,6 @@ CairoContext::PushGroupWithContent(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::PopGroup(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_pattern_t* pattern = cairo_pop_group(this->context_);
   return CairoPattern::NewInstance(pattern);
 }
@@ -302,10 +271,6 @@ CairoContext::PopGroup(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::PopGroupToSource(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_pop_group_to_source(this->context_);
   return info.This();
 }
@@ -314,9 +279,6 @@ Napi::Value
 CairoContext::GetGroupTarget(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_surface_t* s = cairo_get_group_target(this->context_);
   cairo_status_t status = cairo_surface_status(s);
   if (status != CAIRO_STATUS_SUCCESS) {
@@ -330,7 +292,7 @@ Napi::Value
 CairoContext::SetSourceRgb(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return info.This();
   }
   // color
@@ -348,11 +310,11 @@ Napi::Value
 CairoContext::SetSourceRgba(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 4)) {
+  if (!CheckArgsNumber(info.Length(), 4, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "r", info[0]) || !ParamIsNumber(env, "g", info[1]) ||
-      !ParamIsNumber(env, "b", info[2]) || !ParamIsNumber(env, "a", info[3])) {
+  if (!ParamIsNumber(info[0], "r", env) || !ParamIsNumber(info[1], "g", env) ||
+      !ParamIsNumber(info[2], "b", env) || !ParamIsNumber(info[3], "a", env)) {
     return info.This();
   }
   double r = info[0].As<Napi::Number>();
@@ -367,7 +329,7 @@ Napi::Value
 CairoContext::SetSource(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   if (!CairoPattern::HasInstance(info[0])) {
@@ -383,7 +345,7 @@ Napi::Value
 CairoContext::SetSourceSurface(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return info.This();
   }
   // surface
@@ -393,7 +355,7 @@ CairoContext::SetSourceSurface(const Napi::CallbackInfo& info)
   CairoSurface* s =
     Napi::ObjectWrap<CairoSurface>::Unwrap(info[0].As<Napi::Object>());
   // x, y
-  if (!ParamIsNumber(env, "x", info[1]) || !ParamIsNumber(env, "y", info[2])) {
+  if (!ParamIsNumber(info[1], "x", env) || !ParamIsNumber(info[2], "y", env)) {
     return info.This();
   }
   double x = info[0].As<Napi::Number>();
@@ -405,10 +367,6 @@ CairoContext::SetSourceSurface(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::GetSource(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_pattern_t* pattern = cairo_get_source(this->context_);
   return CairoPattern::NewInstance(pattern);
 }
@@ -417,10 +375,10 @@ Napi::Value
 CairoContext::SetAntialias(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "antialias", info[0])) {
+  if (!ParamIsNumber(info[0], "antialias", env)) {
     return info.This();
   }
   int antialias = info[0].As<Napi::Number>();
@@ -432,9 +390,6 @@ Napi::Value
 CairoContext::GetAntialias(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_antialias_t antialias = cairo_get_antialias(this->context_);
   return Napi::Number::New(env, antialias);
 }
@@ -443,16 +398,16 @@ Napi::Value
 CairoContext::SetDash(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
   // dashes
-  if (!ParamIsArray(env, "dashes", info[0])) {
+  if (!ParamIsArray(info[0], "dashes", env)) {
     return info.This();
   }
   Napi::Float64Array dashes = info[0].As<Napi::Float64Array>();
   // offset
-  if (!ParamIsNumber(env, "offset", info[1])) {
+  if (!ParamIsNumber(info[1], "offset", env)) {
     return info.This();
   }
   double offset = info[1].As<Napi::Number>();
@@ -464,9 +419,6 @@ Napi::Value
 CairoContext::GetDashCount(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   int count = cairo_get_dash_count(this->context_);
   return Napi::Number::New(env, count);
 }
@@ -475,9 +427,6 @@ Napi::Value
 CairoContext::GetDash(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   int count = cairo_get_dash_count(this->context_);
   if (count == 0) {
     return env.Null();
@@ -495,10 +444,10 @@ Napi::Value
 CairoContext::SetFillRule(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "fill rule", info[0])) {
+  if (!ParamIsNumber(info[0], "fill rule", env)) {
     return info.This();
   }
   int rule = info[0].As<Napi::Number>();
@@ -510,9 +459,6 @@ Napi::Value
 CairoContext::GetFillRule(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_fill_rule_t rule = cairo_get_fill_rule(this->context_);
   return Napi::Number::New(env, rule);
 }
@@ -521,7 +467,7 @@ Napi::Value
 CairoContext::SetLineCap(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
   int cap = info[0].As<Napi::Number>();
@@ -533,9 +479,6 @@ Napi::Value
 CairoContext::GetLineCap(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_line_cap_t cap = cairo_get_line_cap(this->context_);
   return Napi::Number::New(env, cap);
 }
@@ -544,10 +487,10 @@ Napi::Value
 CairoContext::SetLineJoin(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "line join type", info[0])) {
+  if (!ParamIsNumber(info[0], "line join type", env)) {
     return info.This();
   }
   int join = info[0].As<Napi::Number>();
@@ -559,9 +502,6 @@ Napi::Value
 CairoContext::GetLineJoin(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_line_join_t join = cairo_get_line_join(this->context_);
   return Napi::Number::New(env, join);
 }
@@ -570,11 +510,11 @@ Napi::Value
 CairoContext::SetLineWidth(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
   // width
-  if (!ParamIsNumber(env, "width", info[0])) {
+  if (!ParamIsNumber(info[0], "width", env)) {
     return info.This();
   }
   double width = info[0].As<Napi::Number>();
@@ -586,9 +526,6 @@ Napi::Value
 CairoContext::GetLineWidth(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   double width = cairo_get_line_width(this->context_);
   return Napi::Number::New(env, width);
 }
@@ -597,10 +534,10 @@ Napi::Value
 CairoContext::SetMiterLimit(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "miter limit", info[0])) {
+  if (!ParamIsNumber(info[0], "miter limit", env)) {
     return info.This();
   }
   double limit = info[0].As<Napi::Number>();
@@ -612,9 +549,6 @@ Napi::Value
 CairoContext::GetMiterLimit(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   double limit = cairo_get_miter_limit(this->context_);
   return Napi::Number::New(env, limit);
 }
@@ -623,7 +557,7 @@ Napi::Value
 CairoContext::SetOperator(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
   int op = info[0].As<Napi::Number>();
@@ -635,9 +569,6 @@ Napi::Value
 CairoContext::GetOperator(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_operator_t op = cairo_get_operator(this->context_);
   return Napi::Number::New(env, op);
 }
@@ -646,10 +577,10 @@ Napi::Value
 CairoContext::SetTolerance(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "tolerance", info[0])) {
+  if (!ParamIsNumber(info[0], "tolerance", env)) {
     return info.This();
   }
   double tolerance = info[0].As<Napi::Number>();
@@ -661,9 +592,6 @@ Napi::Value
 CairoContext::GetTolerance(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   double tolerance = cairo_get_tolerance(this->context_);
   return Napi::Number::New(env, tolerance);
 }
@@ -671,10 +599,6 @@ CairoContext::GetTolerance(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::Clip(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_clip(this->context_);
   return info.This();
 }
@@ -682,10 +606,6 @@ CairoContext::Clip(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::ClipPreserve(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_clip_preserve(this->context_);
   return info.This();
 }
@@ -694,9 +614,6 @@ Napi::Value
 CairoContext::ClipExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   double x1, y1, x2, y2;
   cairo_clip_extents(this->context_, &x1, &y1, &x2, &y2);
   Napi::Object result = Napi::Object::New(env);
@@ -711,10 +628,10 @@ Napi::Value
 CairoContext::InClip(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return env.Undefined();
   }
   double x = info[0].As<Napi::Number>();
@@ -726,10 +643,6 @@ CairoContext::InClip(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::ResetClip(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_reset_clip(this->context_);
   return info.This();
 }
@@ -753,10 +666,6 @@ CairoContext::CopyClipRectangleList(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::Fill(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_fill(this->context_);
   return info.This();
 }
@@ -764,10 +673,6 @@ CairoContext::Fill(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::FillPreserve(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_fill_preserve(this->context_);
   return info.This();
 }
@@ -776,9 +681,6 @@ Napi::Value
 CairoContext::FillExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   double x1, y1, x2, y2;
   cairo_fill_extents(this->context_, &x1, &y1, &x2, &y2);
   Napi::Object result = Napi::Object::New(env);
@@ -793,10 +695,10 @@ Napi::Value
 CairoContext::InFill(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return env.Undefined();
   }
   double x = info[0].As<Napi::Number>();
@@ -809,7 +711,7 @@ Napi::Value
 CairoContext::Mask(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
   if (!CairoPattern::HasInstance(info[0])) {
@@ -825,7 +727,7 @@ Napi::Value
 CairoContext::MaskSurface(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return info.This();
   }
   if (!CairoSurface::HasInstance(info[0])) {
@@ -833,7 +735,7 @@ CairoContext::MaskSurface(const Napi::CallbackInfo& info)
   }
   CairoSurface* surface =
     Napi::ObjectWrap<CairoSurface>::Unwrap(info[0].As<Napi::Object>());
-  if (!ParamIsNumber(env, "x", info[1]) || !ParamIsNumber(env, "y", info[2])) {
+  if (!ParamIsNumber(info[1], "x", env) || !ParamIsNumber(info[2], "y", env)) {
     return info.This();
   }
   double x = info[1].As<Napi::Number>();
@@ -845,10 +747,6 @@ CairoContext::MaskSurface(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::Paint(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_paint(this->context_);
   return info.This();
 }
@@ -857,10 +755,10 @@ Napi::Value
 CairoContext::PaintWithAlpha(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "alpha", info[0])) {
+  if (!ParamIsNumber(info[0], "alpha", env)) {
     return info.This();
   }
   double alpha = info[0].As<Napi::Number>();
@@ -871,10 +769,6 @@ CairoContext::PaintWithAlpha(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::Stroke(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_stroke(this->context_);
   return info.This();
 }
@@ -882,10 +776,6 @@ CairoContext::Stroke(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::StrokePreserve(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_stroke_preserve(this->context_);
   return info.This();
 }
@@ -894,9 +784,6 @@ Napi::Value
 CairoContext::StrokeExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   double x1, y1, x2, y2;
   cairo_stroke_extents(this->context_, &x1, &y1, &x2, &y2);
   Napi::Object result = Napi::Object::New(env);
@@ -911,10 +798,10 @@ Napi::Value
 CairoContext::InStroke(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return env.Undefined();
   }
   double x = info[0].As<Napi::Number>();
@@ -926,10 +813,6 @@ CairoContext::InStroke(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::CopyPage(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_copy_page(this->context_);
   return info.This();
 }
@@ -937,10 +820,6 @@ CairoContext::CopyPage(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::ShowPage(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_show_page(this->context_);
   return info.This();
 }
@@ -949,9 +828,6 @@ Napi::Value
 CairoContext::GetReferenceCount(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   unsigned int count = cairo_get_reference_count(this->context_);
   return Napi::Number::New(env, count);
 }
@@ -976,9 +852,6 @@ Napi::Value
 CairoContext::CopyPath(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_path_t* path = cairo_copy_path(this->context_);
   if (path->data == nullptr && path->num_data == 0) {
     return ThrowStatusErrorAsJavaScriptException(
@@ -991,9 +864,6 @@ Napi::Value
 CairoContext::CopyPathFlat(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_path_t* path = cairo_copy_path_flat(this->context_);
   if (path->data == nullptr && path->num_data == 0) {
     return ThrowStatusErrorAsJavaScriptException(
@@ -1006,7 +876,7 @@ Napi::Value
 CairoContext::AppendPath(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
   if (!CairoPath::HasInstance(info[0])) {
@@ -1022,9 +892,6 @@ Napi::Value
 CairoContext::HasCurrentPoint(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_bool_t has = cairo_has_current_point(this->context_);
   return Napi::Boolean::New(env, has);
 }
@@ -1032,10 +899,6 @@ CairoContext::HasCurrentPoint(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::NewPath(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_new_path(this->context_);
   return info.This();
 }
@@ -1043,10 +906,6 @@ CairoContext::NewPath(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::NewSubPath(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_new_sub_path(this->context_);
   return info.This();
 }
@@ -1054,10 +913,6 @@ CairoContext::NewSubPath(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::ClosePath(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_close_path(this->context_);
   return info.This();
 }
@@ -1066,13 +921,13 @@ Napi::Value
 CairoContext::Arc(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 5)) {
+  if (!CheckArgsNumber(info.Length(), 5, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1]) ||
-      !ParamIsNumber(env, "radius", info[2]) ||
-      !ParamIsNumber(env, "start angle", info[3]) ||
-      !ParamIsNumber(env, "end angle", info[4])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env) ||
+      !ParamIsNumber(info[2], "radius", env) ||
+      !ParamIsNumber(info[3], "start angle", env) ||
+      !ParamIsNumber(info[4], "end angle", env)) {
     return info.This();
   }
   double x = info[0].As<Napi::Number>();
@@ -1088,13 +943,13 @@ Napi::Value
 CairoContext::ArcNegative(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 5)) {
+  if (!CheckArgsNumber(info.Length(), 5, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1]) ||
-      !ParamIsNumber(env, "radius", info[2]) ||
-      !ParamIsNumber(env, "start angle", info[3]) ||
-      !ParamIsNumber(env, "end angle", info[4])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env) ||
+      !ParamIsNumber(info[2], "radius", env) ||
+      !ParamIsNumber(info[3], "start angle", env) ||
+      !ParamIsNumber(info[4], "end angle", env)) {
     return env.Undefined();
   }
   double x = info[0].As<Napi::Number>();
@@ -1110,15 +965,15 @@ Napi::Value
 CairoContext::CurveTo(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 6)) {
+  if (!CheckArgsNumber(info.Length(), 6, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "x1", info[0]) ||
-      !ParamIsNumber(env, "y1", info[1]) ||
-      !ParamIsNumber(env, "x2", info[2]) ||
-      !ParamIsNumber(env, "y2", info[3]) ||
-      !ParamIsNumber(env, "x3", info[4]) ||
-      !ParamIsNumber(env, "y3", info[5])) {
+  if (!ParamIsNumber(info[0], "x1", env) ||
+      !ParamIsNumber(info[1], "y1", env) ||
+      !ParamIsNumber(info[2], "x2", env) ||
+      !ParamIsNumber(info[3], "y2", env) ||
+      !ParamIsNumber(info[4], "x3", env) ||
+      !ParamIsNumber(info[5], "y3", env)) {
     return info.This();
   }
   double x1 = info[0].As<Napi::Number>();
@@ -1135,10 +990,10 @@ Napi::Value
 CairoContext::LineTo(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return info.This();
   }
   double x = info[0].As<Napi::Number>();
@@ -1151,10 +1006,10 @@ Napi::Value
 CairoContext::MoveTo(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return info.This();
   }
   double x = info[0].As<Napi::Number>();
@@ -1167,26 +1022,26 @@ Napi::Value
 CairoContext::Rectangle(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 4)) {
+  if (!CheckArgsNumber(info.Length(), 4, env)) {
     return info.This();
   }
   // x
-  if (!ParamIsNumber(env, "x", info[0])) {
+  if (!ParamIsNumber(info[0], "x", env)) {
     return info.This();
   }
   double x = info[0].As<Napi::Number>();
   // y
-  if (!ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[1], "y", env)) {
     return info.This();
   }
   double y = info[1].As<Napi::Number>();
   // width
-  if (!ParamIsNumber(env, "width", info[2])) {
+  if (!ParamIsNumber(info[2], "width", env)) {
     return info.This();
   }
   double width = info[2].As<Napi::Number>();
   // height
-  if (!ParamIsNumber(env, "height", info[3])) {
+  if (!ParamIsNumber(info[3], "height", env)) {
     return info.This();
   }
   double height = info[3].As<Napi::Number>();
@@ -1198,10 +1053,10 @@ Napi::Value
 CairoContext::GlyphPath(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsArray(env, "glyphs", info[0])) {
+  if (!ParamIsArray(info[0], "glyphs", env)) {
     return info.This();
   }
   Napi::Array glyphs = info[0].As<Napi::Array>();
@@ -1221,10 +1076,10 @@ Napi::Value
 CairoContext::TextPath(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsString(env, "text", info[0])) {
+  if (!ParamIsString(info[0], "text", env)) {
     return info.This();
   }
   string text = info[0].As<Napi::String>();
@@ -1236,15 +1091,15 @@ Napi::Value
 CairoContext::RelCurveTo(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 6)) {
+  if (!CheckArgsNumber(info.Length(), 6, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "dx1", info[0]) ||
-      !ParamIsNumber(env, "dy1", info[1]) ||
-      !ParamIsNumber(env, "dx2", info[2]) ||
-      !ParamIsNumber(env, "dy2", info[3]) ||
-      !ParamIsNumber(env, "dx3", info[4]) ||
-      !ParamIsNumber(env, "dy3", info[5])) {
+  if (!ParamIsNumber(info[0], "dx1", env) ||
+      !ParamIsNumber(info[1], "dy1", env) ||
+      !ParamIsNumber(info[2], "dx2", env) ||
+      !ParamIsNumber(info[3], "dy2", env) ||
+      !ParamIsNumber(info[4], "dx3", env) ||
+      !ParamIsNumber(info[5], "dy3", env)) {
     return info.This();
   }
   double dx1 = info[0].As<Napi::Number>();
@@ -1261,11 +1116,11 @@ Napi::Value
 CairoContext::RelLineTo(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "dx", info[0]) ||
-      !ParamIsNumber(env, "dy", info[1])) {
+  if (!ParamIsNumber(info[0], "dx", env) ||
+      !ParamIsNumber(info[1], "dy", env)) {
     return info.This();
   }
   double dx = info[0].As<Napi::Number>();
@@ -1278,11 +1133,11 @@ Napi::Value
 CairoContext::RelMoveTo(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "dx", info[0]) ||
-      !ParamIsNumber(env, "dy", info[1])) {
+  if (!ParamIsNumber(info[0], "dx", env) ||
+      !ParamIsNumber(info[1], "dy", env)) {
     return info.This();
   }
   double dx = info[0].As<Napi::Number>();
@@ -1295,9 +1150,6 @@ Napi::Value
 CairoContext::PathExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   double x1, y1, x2, y2;
   cairo_path_extents(this->context_, &x1, &y1, &x2, &y2);
   Napi::Object result = Napi::Object::New(env);
@@ -1312,10 +1164,10 @@ Napi::Value
 CairoContext::Translate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return env.Undefined();
   }
   double x = info[0].As<Napi::Number>();
@@ -1328,10 +1180,10 @@ Napi::Value
 CairoContext::Scale(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return env.Undefined();
   }
   double x = info[0].As<Napi::Number>();
@@ -1344,10 +1196,10 @@ Napi::Value
 CairoContext::Rotate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "angle", info[0])) {
+  if (!ParamIsNumber(info[0], "angle", env)) {
     return env.Undefined();
   }
   double angle = info[0].As<Napi::Number>();
@@ -1359,10 +1211,10 @@ Napi::Value
 CairoContext::Transform(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsMatrix(env, "matrix", info[0])) {
+  if (!ParamIsMatrix(info[0], "matrix", env)) {
     return env.Undefined();
   }
   cairo_matrix_t matrix;
@@ -1375,10 +1227,10 @@ Napi::Value
 CairoContext::SetMatrix(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsMatrix(env, "matrix", info[0])) {
+  if (!ParamIsMatrix(info[0], "matrix", env)) {
     return env.Undefined();
   }
   cairo_matrix_t matrix;
@@ -1391,9 +1243,6 @@ Napi::Value
 CairoContext::GetMatrix(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_matrix_t matrix;
   cairo_get_matrix(this->context_, &matrix);
   Napi::Object result = Napi::Object::New(env);
@@ -1404,10 +1253,6 @@ CairoContext::GetMatrix(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::IdentityMatrix(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_identity_matrix(this->context_);
   return info.This();
 }
@@ -1416,10 +1261,10 @@ Napi::Value
 CairoContext::UserToDevice(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return env.Undefined();
   }
   double x = info[0].As<Napi::Number>();
@@ -1435,11 +1280,11 @@ Napi::Value
 CairoContext::UserToDeviceDistance(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "dx", info[0]) ||
-      !ParamIsNumber(env, "dy", info[1])) {
+  if (!ParamIsNumber(info[0], "dx", env) ||
+      !ParamIsNumber(info[1], "dy", env)) {
     return env.Undefined();
   }
   double dx = info[0].As<Napi::Number>();
@@ -1455,10 +1300,10 @@ Napi::Value
 CairoContext::DeviceToUser(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return env.Undefined();
   }
   double x = info[0].As<Napi::Number>();
@@ -1474,11 +1319,11 @@ Napi::Value
 CairoContext::DeviceToUserDistance(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "dx", info[0]) ||
-      !ParamIsNumber(env, "dy", info[1])) {
+  if (!ParamIsNumber(info[0], "dx", env) ||
+      !ParamIsNumber(info[1], "dy", env)) {
     return env.Undefined();
   }
   double dx = info[0].As<Napi::Number>();
@@ -1493,12 +1338,12 @@ Napi::Value
 CairoContext::SelectFontFace(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return env.Undefined();
   }
-  if (!ParamIsString(env, "font family", info[0]) ||
-      !ParamIsNumber(env, "font slant", info[1]) ||
-      !ParamIsNumber(env, "font weight", info[2])) {
+  if (!ParamIsString(info[0], "font family", env) ||
+      !ParamIsNumber(info[1], "font slant", env) ||
+      !ParamIsNumber(info[2], "font weight", env)) {
     return env.Undefined();
   }
   string family = info[0].As<Napi::String>();
@@ -1515,10 +1360,10 @@ Napi::Value
 CairoContext::SetFontSize(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "font size", info[0])) {
+  if (!ParamIsNumber(info[0], "font size", env)) {
     return env.Undefined();
   }
   double size = info[0].As<Napi::Number>();
@@ -1530,8 +1375,8 @@ Napi::Value
 CairoContext::SetFontMatrix(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1) ||
-      !ParamIsMatrix(env, "matrix", info[0])) {
+  if (!CheckArgsNumber(info.Length(), 1, env) ||
+      !ParamIsMatrix(info[0], "matrix", env)) {
     return env.Undefined();
   }
   cairo_matrix_t matrix;
@@ -1544,9 +1389,6 @@ Napi::Value
 CairoContext::GetFontMatrix(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_matrix_t matrix;
   cairo_get_font_matrix(this->context_, &matrix);
   Napi::Object result = Napi::Object::New(env);
@@ -1558,7 +1400,7 @@ Napi::Value
 CairoContext::SetFontOptions(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   if (!CairoFontOptions::HasInstance(info[0])) {
@@ -1573,10 +1415,6 @@ CairoContext::SetFontOptions(const Napi::CallbackInfo& info)
 Napi::Value
 CairoContext::GetFontOptions(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_font_options_t* options = cairo_font_options_create();
   cairo_get_font_options(this->context_, options);
   return CairoFontOptions::NewInstance(options);
@@ -1586,7 +1424,7 @@ Napi::Value
 CairoContext::SetFontFace(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   if (!CairoFontFace::HasInstance(info[0])) {
@@ -1602,9 +1440,6 @@ Napi::Value
 CairoContext::GetFontFace(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_font_face_t* face = cairo_get_font_face(this->context_);
   cairo_status_t status = cairo_font_face_status(face);
   if (status != CAIRO_STATUS_SUCCESS) {
@@ -1618,7 +1453,7 @@ Napi::Value
 CairoContext::SetScaledFont(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   if (!CairoScaledFont::HasInstance(info[0])) {
@@ -1634,9 +1469,6 @@ Napi::Value
 CairoContext::GetScaledFont(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_scaled_font_t* sf = cairo_get_scaled_font(this->context_);
   cairo_status_t status = cairo_scaled_font_status(sf);
   if (status != CAIRO_STATUS_SUCCESS) {
@@ -1650,8 +1482,8 @@ Napi::Value
 CairoContext::ShowText(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1) ||
-      !ParamIsString(env, "text", info[0])) {
+  if (!CheckArgsNumber(info.Length(), 1, env) ||
+      !ParamIsString(info[0], "text", env)) {
     return env.Undefined();
   }
   string text = info[0].As<Napi::String>();
@@ -1663,10 +1495,10 @@ Napi::Value
 CairoContext::ShowGlyphs(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsArray(env, "glyphs", info[0])) {
+  if (!ParamIsArray(info[0], "glyphs", env)) {
     return env.Undefined();
   }
   Napi::Array arr = info[0].As<Napi::Array>();
@@ -1693,9 +1525,6 @@ Napi::Value
 CairoContext::FontExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_font_extents_t extents;
   cairo_font_extents(this->context_, &extents);
   Napi::Object result = Napi::Object::New(env);
@@ -1707,8 +1536,8 @@ Napi::Value
 CairoContext::TextExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1) ||
-      !ParamIsString(env, "text", info[0])) {
+  if (!CheckArgsNumber(info.Length(), 1, env) ||
+      !ParamIsString(info[0], "text", env)) {
     return env.Undefined();
   }
   string text = info[0].As<Napi::String>();
@@ -1723,10 +1552,10 @@ Napi::Value
 CairoContext::GlyphExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsArray(env, "glyphs", info[0])) {
+  if (!ParamIsArray(info[0], "glyphs", env)) {
     return env.Undefined();
   }
   Napi::Array arr = info[0].As<Napi::Array>();

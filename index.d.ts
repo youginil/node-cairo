@@ -404,8 +404,8 @@ export class CairoContext {
   pathExtents(): { x1: number, y1: number, x2: number, y2: number };
 
   /* Transformations */
-  translate(x: number, y: number): this;
-  scale(x: number, y: number): this;
+  translate(tx: number, ty: number): this;
+  scale(sx: number, sy: number): this;
   rotate(angle: number): this;
   transform(matrix: CairoMatrix): this;
   setMatrix(matrix: CairoMatrix): this;
@@ -636,3 +636,120 @@ export function matrixInvert(matrix: CairoMatrix): void;
 export function matrixMultiply(a: CairoMatrix, b: CairoMatrix): CairoMatrix;
 export function matrixTransformDistance(matrix: CairoMatrix, dx: number, dy: number): [number, number];
 export function matrixTransformPoint(matrix: CairoMatrix, x: number, y: number): [number, number];
+
+export enum PangoWrapMode {
+  WORD,
+  CHAR,
+  WORD_CHAR
+}
+
+export enum PangoEllipsizeMode {
+  NONE,
+  START,
+  MIDDLE,
+  END
+}
+
+export enum PangoAlignment {
+  LEFT,
+  CENTER,
+  RIGHT
+}
+
+export type PangoRectangle = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export class PangoFontDescription {
+  static fromString(font: string): PangoFontDescription;
+  free(): this;
+}
+
+export class PangoLayout {
+  static cairoCreateLayout(ctx: CairoContext): PangoLayout;
+  cairoUpdateLayout(ctx: CairoContext): this;
+  cairoShowLayout(ctx: CairoContext): this;
+  setText(text: string): this;
+  getText(): string;
+  getCharacterCount(): number;
+  setMarkup(markup: string): this;
+  setMarkupAccel(markup: string, marker: number): number;
+  setFontDescription(description: PangoFontDescription): this;
+  getFontDescription(): PangoFontDescription;
+  setWidth(width: number): this;
+  getWidth(): number;
+  setHeight(height: number): this;
+  getHeight(): number;
+  setWrap(wrap: PangoWrapMode): this;
+  getWrap(): PangoWrapMode;
+  isWrapped(): boolean;
+  setEllipsize(ellipsize: PangoEllipsizeMode): this;
+  getEllipsize(): PangoEllipsizeMode;
+  isEllipsized(): boolean;
+  setIndent(indent: number): this;
+  getIndent(): number;
+  getSpacing(): number;
+  setSpacing(spacing: number): this;
+  setLineSpacing(spacing: number): this;
+  getLineSpacing(): number;
+  setJustify(justify: boolean): this;
+  getJustify(): boolean;
+  setAutoDir(autoDir: boolean): this;
+  getAutoDir(): boolean;
+  setAlignment(align: PangoAlignment): this;
+  getAlignment(): PangoAlignment;
+  setSingleParagraphMode(single: boolean): this;
+  getSingleParagraphMode(): boolean;
+  getUnknownGlyphCount(): number;
+  getLogAttrs(): number[];
+  getLogAttrsReadonly(): number[];
+  indexToPos(index: number): PangoRectangle;
+  indexToLineX(index: number, trailing: boolean): { line: number; x: number };
+  xyToIndex(x: number, y: number): { index: number; trailing: number; inside: boolean };
+  getCursorPos(index: number): { strong: PangoRectangle; weak: PangoRectangle };
+  moveCursorVisually(strong: boolean, index: number, trailing: number, direction: number): { index: number; trailing: number };
+  getExtents(): { ink: PangoRectangle | null; logical: PangoRectangle | null };
+  getPixelExtents(): { ink: PangoRectangle | null; logical: PangoRectangle | null };
+  getSize(): [number, number];
+  getPixelSize(): [number, number];
+  getBaseline(): number;
+  getLineCount(): number;
+  getLine(index: number): PangoLayoutLine | null;
+  getLineReadonly(index: number): PangoLayoutLine | null;
+  getIter(): PangoLayoutIter;
+}
+
+export class PangoLayoutLine {
+  ref(): this;
+  unref(): this;
+  getExtents(): { ink: PangoRectangle | null; logical: PangoRectangle | null };
+  getPixelExtents(): { ink: PangoRectangle | null; logical: PangoRectangle | null };
+  indexToX(index: number, trailing: boolean): number;
+  xToIndex(x: number): { index: number; trailing: number };
+  getXRanges(start: number, end: number): [number, number][];
+  getHeight(): number;
+}
+
+export class PangoLayoutIter {
+  copy(): PangoLayoutIter;
+  free(): this;
+  nextRun(): boolean;
+  nextChar(): boolean;
+  nextCluster(): boolean;
+  nextLine(): boolean;
+  atLastLine(): boolean;
+  getIndex(): number;
+  getBaseline(): number;
+  getLine(): PangoLayoutLine | null;
+  getLineReadonly(): PangoLayoutLine | null;
+  getLayout(): PangoLayout | null;
+  getCharExtents(): PangoRectangle;
+  getClusterExtents(): { ink: PangoRectangle | null; logical: PangoRectangle | null };
+  getRunExtents(): { ink: PangoRectangle | null; logical: PangoRectangle | null };
+  getLineYRange(): [number, number];
+  getLineExtents(): { ink: PangoRectangle | null; logical: PangoRectangle | null };
+  getLayoutExtents(): { ink: PangoRectangle | null; logical: PangoRectangle | null };
+}

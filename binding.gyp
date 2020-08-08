@@ -16,15 +16,27 @@
                 "src/node-cairo-region.cc",
                 "src/node-cairo-scaled-font.cc",
                 "src/node-cairo-surface.cc",
+                "src/node-pango-enum.cc",
+                "src/node-pango-font-description.cc",
+                "src/node-pango-layout.cc",
+                "src/node-pango-layout-iter.cc",
+                "src/node-pango-layout-line.cc"
             ],
             "cflags!": ["-fno-exceptions"],
             "cflags_cc!": ["-fno-exceptions"],
             "include_dirs": [
                 "<!@(node -p \"require('node-addon-api').include\")",
-                "/usr/local/opt/cairo/include/cairo"
+                "/usr/local/opt/cairo/include/cairo",
+                "/usr/local/opt/pango/include/pango-1.0",
+                "/usr/local/opt/glib/include/glib-2.0",
+                "/usr/local/opt/glib/lib/glib-2.0/include",
+                "/usr/local/opt/harfbuzz/include/harfbuzz"
             ],
             "defines": ['NAPI_DISABLE_CPP_EXCEPTIONS'],
-            "libraries": ["/usr/local/opt/cairo/lib/libcairo.dylib"]
+            "libraries": [
+                "/usr/local/opt/cairo/lib/libcairo.dylib",
+                "/usr/local/opt/pango/lib/libpangocairo-1.0.dylib"
+            ]
         }
     ]
 }

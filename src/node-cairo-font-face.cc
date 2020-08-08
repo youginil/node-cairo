@@ -81,10 +81,6 @@ CairoFontFace::SetFontFace(cairo_font_face_t* fontFace)
 Napi::Value
 CairoFontFace::Reference(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_font_face_reference(this->fontFace_);
   return info.This();
 }
@@ -92,10 +88,6 @@ CairoFontFace::Reference(const Napi::CallbackInfo& info)
 Napi::Value
 CairoFontFace::Destroy(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   if (this->fontFace_) {
     cairo_font_face_destroy(this->fontFace_);
     this->fontFace_ = nullptr;
@@ -107,9 +99,6 @@ Napi::Value
 CairoFontFace::Status(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_status_t status = cairo_font_face_status(this->fontFace_);
   return Napi::Number::New(env, status);
 }
@@ -118,9 +107,6 @@ Napi::Value
 CairoFontFace::GetType(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_font_type_t type = cairo_font_face_get_type(this->fontFace_);
   return Napi::Number::New(env, type);
 }
@@ -129,9 +115,6 @@ Napi::Value
 CairoFontFace::GetReferenceCount(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   unsigned int count = cairo_font_face_get_reference_count(this->fontFace_);
   return Napi::Number::New(env, count);
 }
@@ -156,12 +139,12 @@ Napi::Value
 CairoFontFace::ToyFontFaceCreate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return env.Undefined();
   }
-  if (!ParamIsString(env, "font family", info[0]) ||
-      !ParamIsNumber(env, "font slant", info[1]) ||
-      !ParamIsNumber(env, "font weight", info[2])) {
+  if (!ParamIsString(info[0], "font family", env) ||
+      !ParamIsNumber(info[1], "font slant", env) ||
+      !ParamIsNumber(info[2], "font weight", env)) {
     return env.Undefined();
   }
   string family = info[0].As<Napi::String>();
@@ -176,9 +159,6 @@ Napi::Value
 CairoFontFace::ToyFontFaceGetFamily(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   const char* family = cairo_toy_font_face_get_family(this->fontFace_);
   return Napi::String::New(env, family);
 }
@@ -187,9 +167,6 @@ Napi::Value
 CairoFontFace::ToyFontFaceGetSlant(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_font_slant_t slant = cairo_toy_font_face_get_slant(this->fontFace_);
   return Napi::Number::New(env, slant);
 }
@@ -198,9 +175,6 @@ Napi::Value
 CairoFontFace::ToyFontFaceGetWeight(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_font_weight_t weight = cairo_toy_font_face_get_weight(this->fontFace_);
   return Napi::Number::New(env, weight);
 }

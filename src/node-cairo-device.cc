@@ -100,10 +100,6 @@ CairoDevice::SetDevice(cairo_device_t* device)
 Napi::Value
 CairoDevice::Reference(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_device_reference(this->device_);
   return info.This();
 }
@@ -111,10 +107,6 @@ CairoDevice::Reference(const Napi::CallbackInfo& info)
 Napi::Value
 CairoDevice::Destroy(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   if (this->device_) {
     cairo_device_destroy(this->device_);
     this->device_ = nullptr;
@@ -126,9 +118,6 @@ Napi::Value
 CairoDevice::Status(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   int status = cairo_device_status(this->device_);
   return Napi::Number::New(env, status);
 }
@@ -136,10 +125,6 @@ CairoDevice::Status(const Napi::CallbackInfo& info)
 Napi::Value
 CairoDevice::Finish(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_device_finish(this->device_);
   return info.This();
 }
@@ -147,10 +132,6 @@ CairoDevice::Finish(const Napi::CallbackInfo& info)
 Napi::Value
 CairoDevice::Flush(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_device_flush(this->device_);
   return info.This();
 }
@@ -159,9 +140,6 @@ Napi::Value
 CairoDevice::GetType(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_device_type_t type = cairo_device_get_type(this->device_);
   return Napi::Number::New(env, type);
 }
@@ -170,9 +148,6 @@ Napi::Value
 CairoDevice::GetReferenceCount(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   unsigned int count = cairo_device_get_reference_count(this->device_);
   return Napi::Number::New(env, count);
 }
@@ -181,11 +156,11 @@ Napi::Value
 CairoDevice::SetUserData(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
   // key
-  if (!ParamIsString(env, "key", info[0])) {
+  if (!ParamIsString(info[0], "key", env)) {
     return info.This();
   }
   string key = info[0].As<Napi::String>();
@@ -219,10 +194,10 @@ Napi::Value
 CairoDevice::GetUserData(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsString(env, "key", info[0])) {
+  if (!ParamIsString(info[0], "key", env)) {
     return env.Undefined();
   }
   string key = info[0].As<Napi::String>();
@@ -239,9 +214,6 @@ Napi::Value
 CairoDevice::Acquire(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_status_t status = cairo_device_acquire(this->device_);
   if (status != CAIRO_STATUS_SUCCESS) {
     ThrowStatusErrorAsJavaScriptException(
@@ -253,10 +225,6 @@ CairoDevice::Acquire(const Napi::CallbackInfo& info)
 Napi::Value
 CairoDevice::Release(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   cairo_device_release(this->device_);
   return info.This();
 }
@@ -265,9 +233,6 @@ Napi::Value
 CairoDevice::ObserverElapsed(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return info.This();
-  }
   double t = cairo_device_observer_elapsed(this->device_);
   return Napi::Number::New(env, t);
 }
@@ -276,9 +241,6 @@ Napi::Value
 CairoDevice::ObserverFillElapsed(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   double t = cairo_device_observer_fill_elapsed(this->device_);
   return Napi::Number::New(env, t);
 }
@@ -287,9 +249,6 @@ Napi::Value
 CairoDevice::ObserverGlyphsElapsed(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   double t = cairo_device_observer_glyphs_elapsed(this->device_);
   return Napi::Number::New(env, t);
 }
@@ -298,9 +257,6 @@ Napi::Value
 CairoDevice::ObserverPaintElapsed(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   double t = cairo_device_observer_paint_elapsed(this->device_);
   return Napi::Number::New(env, t);
 }
@@ -317,9 +273,6 @@ Napi::Value
 CairoDevice::ObserverStrokeElapsed(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   double t = cairo_device_observer_stroke_elapsed(this->device_);
   return Napi::Number::New(env, t);
 }
@@ -328,10 +281,10 @@ Napi::Value
 CairoDevice::ScriptCreate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsString(env, "filename", info[0])) {
+  if (!ParamIsString(info[0], "filename", env)) {
     return env.Undefined();
   }
   string filename = info[0].As<Napi::String>();
@@ -356,9 +309,6 @@ Napi::Value
 CairoDevice::ScriptGetMode(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_script_mode_t mode = cairo_script_get_mode(this->device_);
   return Napi::Number::New(env, mode);
 }
@@ -367,10 +317,10 @@ Napi::Value
 CairoDevice::ScriptSetMode(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "mode", info[0])) {
+  if (!ParamIsNumber(info[0], "mode", env)) {
     return info.This();
   }
   int mode = info[0].As<Napi::Number>();
@@ -382,10 +332,10 @@ Napi::Value
 CairoDevice::ScriptWriteComment(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsString(env, "comment", info[0])) {
+  if (!ParamIsString(info[0], "comment", env)) {
     return info.This();
   }
   string comment = info[0].As<Napi::String>();

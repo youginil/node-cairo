@@ -10,6 +10,12 @@
 #include "node-cairo-scaled-font.h"
 #include "node-cairo-surface.h"
 
+#include "node-pango-enum.h"
+#include "node-pango-font-description.h"
+#include "node-pango-layout-iter.h"
+#include "node-pango-layout-line.h"
+#include "node-pango-layout.h"
+
 Napi::Object
 InitAll(Napi::Env env, Napi::Object exports)
 {
@@ -24,6 +30,13 @@ InitAll(Napi::Env env, Napi::Object exports)
   CairoRegion::Init(env, exports);
   CairoScaledFont::Init(env, exports);
   CairoSurface::Init(env, exports);
+
+  InitPangoEnums(env, exports);
+  NodePangoFontDescription::Init(env, exports);
+  NodePangoLayout::Init(env, exports);
+  NodePangoLayoutIter::Init(env, exports);
+  NodePangoLayoutLine::Init(env, exports);
+
   return exports;
 }
 

@@ -91,9 +91,6 @@ Napi::Value
 CairoRegion::Create(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_region_t* region = cairo_region_create();
   cairo_status_t status = cairo_region_status(region);
   if (status != CAIRO_STATUS_SUCCESS) {
@@ -107,10 +104,10 @@ Napi::Value
 CairoRegion::CreateRectangle(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsRectangleInt(env, "rectangle", info[0])) {
+  if (!ParamIsRectangleInt(info[0], "rectangle", env)) {
     return env.Undefined();
   }
   cairo_rectangle_int_t rect;
@@ -128,10 +125,10 @@ Napi::Value
 CairoRegion::CreateRectangles(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsArray(env, "rectangles", info[0])) {
+  if (!ParamIsArray(info[0], "rectangles", env)) {
     return env.Undefined();
   }
   Napi::Array arr = info[0].As<Napi::Array>();
@@ -159,9 +156,6 @@ Napi::Value
 CairoRegion::Copy(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_region_t* region = cairo_region_copy(this->region_);
   cairo_status_t status = cairo_region_status(region);
   if (status != CAIRO_STATUS_SUCCESS) {
@@ -174,10 +168,6 @@ CairoRegion::Copy(const Napi::CallbackInfo& info)
 Napi::Value
 CairoRegion::Reference(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_region_reference(this->region_);
   return info.This();
 }
@@ -185,10 +175,6 @@ CairoRegion::Reference(const Napi::CallbackInfo& info)
 Napi::Value
 CairoRegion::Destroy(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_region_destroy(this->region_);
   return info.This();
 }
@@ -197,9 +183,6 @@ Napi::Value
 CairoRegion::Status(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_status_t status = cairo_region_status(this->region_);
   return Napi::Number::New(env, status);
 }
@@ -208,9 +191,6 @@ Napi::Value
 CairoRegion::GetExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_rectangle_int_t extents;
   cairo_region_get_extents(this->region_, &extents);
   Napi::Object result = Napi::Object::New(env);
@@ -225,9 +205,6 @@ Napi::Value
 CairoRegion::NumRectangles(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   int num = cairo_region_num_rectangles(this->region_);
   return Napi::Number::New(env, num);
 }
@@ -236,10 +213,10 @@ Napi::Value
 CairoRegion::GetRectangle(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "rectangle index", info[0])) {
+  if (!ParamIsNumber(info[0], "rectangle index", env)) {
     return env.Undefined();
   }
   int index = info[0].As<Napi::Number>();
@@ -257,9 +234,6 @@ Napi::Value
 CairoRegion::IsEmpty(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_bool_t empty = cairo_region_is_empty(this->region_);
   return Napi::Boolean::New(env, empty);
 }
@@ -268,10 +242,10 @@ Napi::Value
 CairoRegion::ContainsPoint(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return env.Undefined();
   }
   int x = info[0].As<Napi::Number>();
@@ -284,10 +258,10 @@ Napi::Value
 CairoRegion::ContainsRectangle(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsRectangleInt(env, "rectangle", info[0])) {
+  if (!ParamIsRectangleInt(info[0], "rectangle", env)) {
     return env.Undefined();
   }
   cairo_rectangle_int_t rect;
@@ -301,7 +275,7 @@ Napi::Value
 CairoRegion::Equal(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
   cairo_region_t *a, *b;
@@ -333,10 +307,10 @@ Napi::Value
 CairoRegion::Translate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return env.Undefined();
   }
   int x = info[0].As<Napi::Number>();
@@ -349,7 +323,7 @@ Napi::Value
 CairoRegion::Intersect(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   if (!CairoRegion::HasInstance(info[0])) {
@@ -366,10 +340,10 @@ Napi::Value
 CairoRegion::IntersectRectangle(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsRectangleInt(env, "rectangle", info[0])) {
+  if (!ParamIsRectangleInt(info[0], "rectangle", env)) {
     return env.Undefined();
   }
   cairo_rectangle_int_t rect;
@@ -383,7 +357,7 @@ Napi::Value
 CairoRegion::Subtracts(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   if (!CairoRegion::HasInstance(info[0])) {
@@ -399,10 +373,10 @@ Napi::Value
 CairoRegion::SubTractsRectangle(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsRectangleInt(env, "rectangle", info[0])) {
+  if (!ParamIsRectangleInt(info[0], "rectangle", env)) {
     return env.Undefined();
   }
   cairo_rectangle_int_t rect;
@@ -415,7 +389,7 @@ Napi::Value
 CairoRegion::Union(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   if (!CairoRegion::HasInstance(info[0])) {
@@ -431,10 +405,10 @@ Napi::Value
 CairoRegion::UnionRectangle(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsRectangleInt(env, "rectangle", info[0])) {
+  if (!ParamIsRectangleInt(info[0], "rectangle", env)) {
     return env.Undefined();
   }
   cairo_rectangle_int_t rect;
@@ -447,7 +421,7 @@ Napi::Value
 CairoRegion::Xor(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   if (!CairoRegion::HasInstance(info[0])) {
@@ -463,10 +437,10 @@ Napi::Value
 CairoRegion::XorRectangle(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsRectangleInt(env, "rectangle", info[0])) {
+  if (!ParamIsRectangleInt(info[0], "rectangle", env)) {
     return env.Undefined();
   }
   cairo_rectangle_int_t rect;

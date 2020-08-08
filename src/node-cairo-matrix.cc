@@ -27,15 +27,15 @@ Napi::Value
 MatrixInit(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 6)) {
+  if (!CheckArgsNumber(info.Length(), 6, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "xx", info[0]) ||
-      !ParamIsNumber(env, "yx", info[1]) ||
-      !ParamIsNumber(env, "xy", info[2]) ||
-      !ParamIsNumber(env, "yy", info[3]) ||
-      !ParamIsNumber(env, "x0", info[4]) ||
-      !ParamIsNumber(env, "y0", info[5])) {
+  if (!ParamIsNumber(info[0], "xx", env) ||
+      !ParamIsNumber(info[1], "yx", env) ||
+      !ParamIsNumber(info[2], "xy", env) ||
+      !ParamIsNumber(info[3], "yy", env) ||
+      !ParamIsNumber(info[4], "x0", env) ||
+      !ParamIsNumber(info[5], "y0", env)) {
     return env.Undefined();
   }
   double xx = info[0].As<Napi::Number>();
@@ -55,10 +55,10 @@ Napi::Value
 MatrixInitIdentity(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsMatrix(env, "matrix", info[0])) {
+  if (!ParamIsMatrix(info[0], "matrix", env)) {
     return env.Undefined();
   }
   Napi::Object obj = info[0].As<Napi::Object>();
@@ -73,11 +73,11 @@ Napi::Value
 MatrixInitTranslate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "translateX", info[0]) ||
-      !ParamIsNumber(env, "translateY", info[1])) {
+  if (!ParamIsNumber(info[0], "translateX", env) ||
+      !ParamIsNumber(info[1], "translateY", env)) {
     return env.Undefined();
   }
   double tx = info[0].As<Napi::Number>();
@@ -93,11 +93,11 @@ Napi::Value
 MatrixInitScale(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "scaleX", info[0]) ||
-      !ParamIsNumber(env, "scaleY", info[1])) {
+  if (!ParamIsNumber(info[0], "scaleX", env) ||
+      !ParamIsNumber(info[1], "scaleY", env)) {
     return env.Undefined();
   }
   double sx = info[0].As<Napi::Number>();
@@ -113,10 +113,10 @@ Napi::Value
 MatrixInitRotate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "rotate angle", info[0])) {
+  if (!ParamIsNumber(info[0], "rotate angle", env)) {
     return env.Undefined();
   }
   double angle = info[0].As<Napi::Number>();
@@ -131,12 +131,12 @@ Napi::Value
 MatrixTranslate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return env.Undefined();
   }
-  if (!ParamIsMatrix(env, "matrix", info[0]) ||
-      !ParamIsNumber(env, "translateX", info[1]) ||
-      !ParamIsNumber(env, "translateY", info[2])) {
+  if (!ParamIsMatrix(info[0], "matrix", env) ||
+      !ParamIsNumber(info[1], "translateX", env) ||
+      !ParamIsNumber(info[2], "translateY", env)) {
     return env.Undefined();
   }
   Napi::Object obj = info[0].As<Napi::Object>();
@@ -154,12 +154,12 @@ Napi::Value
 MatrixScale(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return env.Undefined();
   }
-  if (!ParamIsMatrix(env, "matrix", info[0]) ||
-      !ParamIsNumber(env, "scaleX", info[1]) ||
-      !ParamIsNumber(env, "scaleY", info[2])) {
+  if (!ParamIsMatrix(info[0], "matrix", env) ||
+      !ParamIsNumber(info[1], "scaleX", env) ||
+      !ParamIsNumber(info[2], "scaleY", env)) {
     return env.Undefined();
   }
   Napi::Object obj = info[0].As<Napi::Object>();
@@ -176,11 +176,11 @@ Napi::Value
 MatrixRotate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsMatrix(env, "matrix", info[0]) ||
-      !ParamIsNumber(env, "rotate angle", info[1])) {
+  if (!ParamIsMatrix(info[0], "matrix", env) ||
+      !ParamIsNumber(info[1], "rotate angle", env)) {
     return env.Undefined();
   }
   Napi::Object obj = info[0].As<Napi::Object>();
@@ -196,10 +196,10 @@ Napi::Value
 MatrixInvert(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsMatrix(env, "matrix", info[1])) {
+  if (!ParamIsMatrix(info[1], "matrix", env)) {
     return env.Undefined();
   }
   Napi::Object obj = info[0].As<Napi::Object>();
@@ -216,11 +216,11 @@ Napi::Value
 MatrixMultiply(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsMatrix(env, "matrix a", info[0]) ||
-      !ParamIsMatrix(env, "matrix b", info[0])) {
+  if (!ParamIsMatrix(info[0], "matrix a", env) ||
+      !ParamIsMatrix(info[0], "matrix b", env)) {
     return env.Undefined();
   }
   cairo_matrix_t a, b, c;
@@ -236,12 +236,12 @@ Napi::Value
 MatrixTransformDistance(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return env.Undefined();
   }
-  if (!ParamIsMatrix(env, "matrix", info[0]) ||
-      !ParamIsNumber(env, "dx", info[1]) ||
-      !ParamIsNumber(env, "dy", info[2])) {
+  if (!ParamIsMatrix(info[0], "matrix", env) ||
+      !ParamIsNumber(info[1], "dx", env) ||
+      !ParamIsNumber(info[2], "dy", env)) {
     return env.Undefined();
   }
   cairo_matrix_t m;
@@ -259,11 +259,11 @@ Napi::Value
 MatrixTransformPoint(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return env.Undefined();
   }
-  if (!ParamIsMatrix(env, "matrix", info[0]) ||
-      !ParamIsNumber(env, "x", info[1]) || !ParamIsNumber(env, "y", info[2])) {
+  if (!ParamIsMatrix(info[0], "matrix", env) ||
+      !ParamIsNumber(info[1], "x", env) || !ParamIsNumber(info[2], "y", env)) {
     return env.Undefined();
   }
   cairo_matrix_t m;

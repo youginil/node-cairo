@@ -5,7 +5,11 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/usr/local/include/node",
-                "/usr/local/opt/cairo/include/cairo"
+                "/usr/local/opt/cairo/include/cairo",
+                "/usr/local/opt/pango/include/pango-1.0",
+                "/usr/local/opt/glib/include/glib-2.0",
+                "/usr/local/opt/glib/lib/glib-2.0/include",
+                "/usr/local/opt/harfbuzz/include/harfbuzz"
             ],
             "defines": [],
             "macFrameworkPath": [

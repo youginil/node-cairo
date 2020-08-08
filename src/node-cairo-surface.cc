@@ -180,7 +180,7 @@ CairoSurface::CreateSimilar(const Napi::CallbackInfo& info)
     return ThrowErrorAsJavaScriptException(env, "Wrong number of arguments");
   }
   // content
-  if (!ParamIsNumber(env, "content", info[0])) {
+  if (!ParamIsNumber(info[0], "content", env)) {
     return env.Undefined();
   }
   int content = info[0].As<Napi::Number>();
@@ -189,8 +189,8 @@ CairoSurface::CreateSimilar(const Napi::CallbackInfo& info)
     return ThrowTypeErrorAsJavaScriptException(
       env, "The second parameter is invalid");
   }
-  if (!ParamIsNumber(env, "width", info[1]) ||
-      !ParamIsNumber(env, "height", info[2])) {
+  if (!ParamIsNumber(info[1], "width", env) ||
+      !ParamIsNumber(info[2], "height", env)) {
     return env.Undefined();
   }
   int width = info[1].As<Napi::Number>();
@@ -217,8 +217,8 @@ CairoSurface::CreateSimilarImage(const Napi::CallbackInfo& info)
     return env.Undefined();
   }
   int format = info[0].As<Napi::Number>();
-  if (!ParamIsNumber(env, "width", info[1]) ||
-      !ParamIsNumber(env, "height", info[2])) {
+  if (!ParamIsNumber(info[1], "width", env) ||
+      !ParamIsNumber(info[2], "height", env)) {
     return env.Undefined();
   }
   int width = info[1].As<Napi::Number>();
@@ -237,26 +237,26 @@ Napi::Value
 CairoSurface::CreateForRectangle(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 4)) {
+  if (!CheckArgsNumber(info.Length(), 4, env)) {
     return env.Undefined();
   }
   // x
-  if (!ParamIsNumber(env, "x", info[0])) {
+  if (!ParamIsNumber(info[0], "x", env)) {
     return env.Undefined();
   }
   double x = info[0].As<Napi::Number>();
   // y
-  if (!ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[1], "y", env)) {
     return env.Undefined();
   }
   double y = info[1].As<Napi::Number>();
   // width
-  if (!ParamIsNumber(env, "width", info[2])) {
+  if (!ParamIsNumber(info[2], "width", env)) {
     return env.Undefined();
   }
   double width = info[2].As<Napi::Number>();
   // height
-  if (!ParamIsNumber(env, "height", info[3])) {
+  if (!ParamIsNumber(info[3], "height", env)) {
     return env.Undefined();
   }
   double height = info[3].As<Napi::Number>();
@@ -274,7 +274,7 @@ Napi::Value
 CairoSurface::Reference(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return info.This();
   }
   cairo_surface_reference(this->surface_);
@@ -285,7 +285,7 @@ Napi::Value
 CairoSurface::Destroy(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return info.This();
   }
   if (this->surface_) {
@@ -299,7 +299,7 @@ Napi::Value
 CairoSurface::Status(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   int status = cairo_surface_status(this->surface_);
@@ -310,7 +310,7 @@ Napi::Value
 CairoSurface::Finish(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return info.This();
   }
   cairo_surface_finish(this->surface_);
@@ -321,7 +321,7 @@ Napi::Value
 CairoSurface::Flush(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return info.This();
   }
   cairo_surface_flush(this->surface_);
@@ -332,7 +332,7 @@ Napi::Value
 CairoSurface::GetDevice(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_device_t* d = cairo_surface_get_device(this->surface_);
@@ -343,7 +343,7 @@ Napi::Value
 CairoSurface::GetFontOptions(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_font_options_t* options = cairo_font_options_create();
@@ -355,7 +355,7 @@ Napi::Value
 CairoSurface::GetContent(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_content_t content = cairo_surface_get_content(this->surface_);
@@ -366,7 +366,7 @@ Napi::Value
 CairoSurface::MarkDirty(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return info.This();
   }
   cairo_surface_mark_dirty(this->surface_);
@@ -377,26 +377,26 @@ Napi::Value
 CairoSurface::MarkDirtyRectangle(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 4)) {
+  if (!CheckArgsNumber(info.Length(), 4, env)) {
     return info.This();
   }
   // x
-  if (!ParamIsNumber(env, "x", info[0])) {
+  if (!ParamIsNumber(info[0], "x", env)) {
     return info.This();
   }
   int x = info[0].As<Napi::Number>();
   // y
-  if (!ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[1], "y", env)) {
     return info.This();
   }
   int y = info[1].As<Napi::Number>();
   // width
-  if (!ParamIsNumber(env, "width", info[2])) {
+  if (!ParamIsNumber(info[2], "width", env)) {
     return info.This();
   }
   int width = info[2].As<Napi::Number>();
   // height
-  if (!ParamIsNumber(env, "width", info[3])) {
+  if (!ParamIsNumber(info[3], "width", env)) {
     return info.This();
   }
   int height = info[3].As<Napi::Number>();
@@ -408,10 +408,10 @@ Napi::Value
 CairoSurface::SetDeviceOffset(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return info.This();
   }
   double x = info[0].As<Napi::Number>();
@@ -424,7 +424,7 @@ Napi::Value
 CairoSurface::GetDeviceOffset(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   double x, y;
@@ -439,7 +439,7 @@ Napi::Value
 CairoSurface::GetDeviceScale(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   double x, y;
@@ -454,11 +454,11 @@ Napi::Value
 CairoSurface::SetDeviceScale(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "x scale", info[0]) ||
-      !ParamIsNumber(env, "y scale", info[1])) {
+  if (!ParamIsNumber(info[0], "x scale", env) ||
+      !ParamIsNumber(info[1], "y scale", env)) {
     return info.This();
   }
   double x = info[0].As<Napi::Number>();
@@ -471,11 +471,11 @@ Napi::Value
 CairoSurface::SetFallbackResolution(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "x pixels", info[0]) ||
-      !ParamIsNumber(env, "y pixels", info[1])) {
+  if (!ParamIsNumber(info[0], "x pixels", env) ||
+      !ParamIsNumber(info[1], "y pixels", env)) {
     return info.This();
   }
   double x = info[0].As<Napi::Number>();
@@ -488,7 +488,7 @@ Napi::Value
 CairoSurface::GetFallbackResolution(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   double x, y;
@@ -503,7 +503,7 @@ Napi::Value
 CairoSurface::GetType(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_surface_type_t type = cairo_surface_get_type(this->surface_);
@@ -514,7 +514,7 @@ Napi::Value
 CairoSurface::GetReferenceCount(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   unsigned int count = cairo_surface_get_reference_count(this->surface_);
@@ -525,11 +525,11 @@ Napi::Value
 CairoSurface::SetUserData(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
   // key
-  if (!ParamIsString(env, "key", info[0])) {
+  if (!ParamIsString(info[0], "key", env)) {
     return info.This();
   }
   string key = info[0].As<Napi::String>();
@@ -565,10 +565,10 @@ Napi::Value
 CairoSurface::GetUserData(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsString(env, "key", info[0])) {
+  if (!ParamIsString(info[0], "key", env)) {
     return env.Undefined();
   }
   string key = info[0].As<Napi::String>();
@@ -583,7 +583,7 @@ Napi::Value
 CairoSurface::CopyPage(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return info.This();
   }
   cairo_surface_copy_page(this->surface_);
@@ -594,7 +594,7 @@ Napi::Value
 CairoSurface::ShowPage(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return info.This();
   }
   cairo_surface_show_page(this->surface_);
@@ -605,7 +605,7 @@ Napi::Value
 CairoSurface::HasShowTextGlyphs(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_bool_t yes = cairo_surface_has_show_text_glyphs(this->surface_);
@@ -616,11 +616,11 @@ Napi::Value
 CairoSurface::SetMimeData(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
   // mime
-  if (!ParamIsString(env, "mime", info[0])) {
+  if (!ParamIsString(info[0], "mime", env)) {
     return info.This();
   }
   string mime = info[0].As<Napi::String>();
@@ -658,10 +658,10 @@ Napi::Value
 CairoSurface::GetMimeData(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsString(env, "mime", info[0])) {
+  if (!ParamIsString(info[0], "mime", env)) {
     return env.Undefined();
   }
   string mime = info[0].As<Napi::String>();
@@ -682,10 +682,10 @@ Napi::Value
 CairoSurface::SupportsMimeType(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsString(env, "mime", info[0])) {
+  if (!ParamIsString(info[0], "mime", env)) {
     return env.Undefined();
   }
   string mime = info[0].As<Napi::String>();
@@ -698,12 +698,12 @@ Napi::Value
 CairoSurface::MapToImage(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   cairo_rectangle_int_t* rectPtr = nullptr;
   if (info[0].IsNull()) {
-  } else if (ParamIsRectangleInt(env, "extents", info[0])) {
+  } else if (ParamIsRectangleInt(info[0], "extents", env)) {
     cairo_rectangle_int_t rect;
     rectPtr = &rect;
     ObjectToRectangleInt(info[0].As<Napi::Object>(), rectPtr);
@@ -719,7 +719,7 @@ Napi::Value
 CairoSurface::UnmapImage(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   if (!CairoSurface::HasInstance(info[0])) {
@@ -735,7 +735,7 @@ Napi::Value
 CairoSurface::FormatStrideForWidth(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
   // format
@@ -744,7 +744,7 @@ CairoSurface::FormatStrideForWidth(const Napi::CallbackInfo& info)
   }
   int format = info[0].As<Napi::Number>();
   // width
-  if (!ParamIsNumber(env, "width", info[1])) {
+  if (!ParamIsNumber(info[1], "width", env)) {
     return env.Undefined();
   }
   int width = info[1].As<Napi::Number>();
@@ -756,12 +756,12 @@ Napi::Value
 CairoSurface::ImageSurfaceCreate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return env.Undefined();
   }
   if (!CheckCairoFormatParameter(env, info[0]) ||
-      !ParamIsNumber(env, "width", info[1]) ||
-      !ParamIsNumber(env, "height", info[2])) {
+      !ParamIsNumber(info[1], "width", env) ||
+      !ParamIsNumber(info[2], "height", env)) {
     return env.Undefined();
   }
   int format = info[0].As<Napi::Number>();
@@ -781,15 +781,15 @@ Napi::Value
 CairoSurface::ImageSurfaceCreateForData(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 5)) {
+  if (!CheckArgsNumber(info.Length(), 5, env)) {
     return env.Undefined();
   }
   // data
-  if (!ParamIsArrayBuffer(env, "data", info[0]) ||
+  if (!ParamIsArrayBuffer(info[0], "data", env) ||
       !CheckCairoFormatParameter(env, info[1]) ||
-      !ParamIsNumber(env, "width", info[2]) ||
-      !ParamIsNumber(env, "height", info[3]) ||
-      !ParamIsNumber(env, "stride", info[4])) {
+      !ParamIsNumber(info[2], "width", env) ||
+      !ParamIsNumber(info[3], "height", env) ||
+      !ParamIsNumber(info[4], "stride", env)) {
     return env.Undefined();
   }
   Napi::ArrayBuffer buf = info[0].As<Napi::ArrayBuffer>();
@@ -812,7 +812,7 @@ Napi::Value
 CairoSurface::ImageSurfaceGetData(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return info.This();
   }
   // TODO
@@ -823,7 +823,7 @@ Napi::Value
 CairoSurface::ImageSurfaceGetFormat(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_format_t format = cairo_image_surface_get_format(this->surface_);
@@ -834,7 +834,7 @@ Napi::Value
 CairoSurface::ImageSurfaceGetWidth(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   int width = cairo_image_surface_get_width(this->surface_);
@@ -845,7 +845,7 @@ Napi::Value
 CairoSurface::ImageSurfaceGetHeight(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   int height = cairo_image_surface_get_height(this->surface_);
@@ -856,7 +856,7 @@ Napi::Value
 CairoSurface::ImageSurfaceGetStride(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   int stride = cairo_image_surface_get_stride(this->surface_);
@@ -867,21 +867,21 @@ Napi::Value
 CairoSurface::PdfSurfaceCreate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return env.Undefined();
   }
   // filename
-  if (!ParamIsString(env, "filename", info[0])) {
+  if (!ParamIsString(info[0], "filename", env)) {
     return env.Undefined();
   }
   string filename = info[0].As<Napi::String>();
   // width in points
-  if (!ParamIsNumber(env, "width", info[1])) {
+  if (!ParamIsNumber(info[1], "width", env)) {
     return env.Undefined();
   }
   double width = info[1].As<Napi::Number>();
   // height in points
-  if (!ParamIsNumber(env, "height", info[2])) {
+  if (!ParamIsNumber(info[2], "height", env)) {
     return env.Undefined();
   }
   double height = info[2].As<Napi::Number>();
@@ -907,8 +907,8 @@ Napi::Value
 CairoSurface::PdfSurfaceRestrictToVersion(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1) ||
-      !ParamIsNumber(env, "version", info[0])) {
+  if (!CheckArgsNumber(info.Length(), 1, env) ||
+      !ParamIsNumber(info[0], "version", env)) {
     return info.This();
   }
   int version = info[0].As<Napi::Number>();
@@ -921,7 +921,7 @@ Napi::Value
 CairoSurface::PdfGetVersions(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   const cairo_pdf_version_t** versions = nullptr;
@@ -938,10 +938,10 @@ Napi::Value
 CairoSurface::PdfVersionToString(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "version", info[0])) {
+  if (!ParamIsNumber(info[0], "version", env)) {
     return env.Undefined();
   }
   int version = info[0].As<Napi::Number>();
@@ -953,11 +953,11 @@ Napi::Value
 CairoSurface::PdfSurfaceSetSize(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "width", info[0]) ||
-      !ParamIsNumber(env, "height", info[1])) {
+  if (!ParamIsNumber(info[0], "width", env) ||
+      !ParamIsNumber(info[1], "height", env)) {
     return info.This();
   }
   double width = info[0].As<Napi::Number>();
@@ -970,13 +970,13 @@ Napi::Value
 CairoSurface::PdfSurfaceAddOutline(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 4)) {
+  if (!CheckArgsNumber(info.Length(), 4, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "parent", info[0]) ||
-      !ParamIsString(env, "name", info[1]) ||
-      !ParamIsString(env, "link attributes", info[2]) ||
-      !ParamIsNumber(env, "flags", info[3])) {
+  if (!ParamIsNumber(info[0], "parent", env) ||
+      !ParamIsString(info[1], "name", env) ||
+      !ParamIsString(info[2], "link attributes", env) ||
+      !ParamIsNumber(info[3], "flags", env)) {
     return env.Undefined();
   }
   int parent = info[0].As<Napi::Number>();
@@ -995,16 +995,16 @@ Napi::Value
 CairoSurface::PdfSurfaceSetMetadata(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
   // metadata
-  if (!ParamIsNumber(env, "metadata", info[0])) {
+  if (!ParamIsNumber(info[0], "metadata", env)) {
     return info.This();
   }
   int metadata = info[0].As<Napi::Number>();
   // value
-  if (!ParamIsString(env, "value", info[1])) {
+  if (!ParamIsString(info[1], "value", env)) {
     return info.This();
   }
   string value = info[1].As<Napi::String>();
@@ -1017,10 +1017,10 @@ Napi::Value
 CairoSurface::PdfSurfaceSetPageLabel(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsString(env, "label", info[0])) {
+  if (!ParamIsString(info[0], "label", env)) {
     return info.This();
   }
   string label = info[0].As<Napi::String>();
@@ -1032,11 +1032,11 @@ Napi::Value
 CairoSurface::PdfSurfaceSetThumbnailSize(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "width", info[0]) ||
-      !ParamIsNumber(env, "height", info[1])) {
+  if (!ParamIsNumber(info[0], "width", env) ||
+      !ParamIsNumber(info[1], "height", env)) {
     return info.This();
   }
   int width = info[0].As<Napi::Number>();
@@ -1049,10 +1049,10 @@ Napi::Value
 CairoSurface::ImageSurfaceCreateFromPng(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsString(env, "filename", info[0])) {
+  if (!ParamIsString(info[0], "filename", env)) {
     return env.Undefined();
   }
   string filename = info[0].As<Napi::String>();
@@ -1077,10 +1077,10 @@ Napi::Value
 CairoSurface::WriteToPng(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsString(env, "filename", info[0])) {
+  if (!ParamIsString(info[0], "filename", env)) {
     return info.This();
   }
   string filename = info[0].As<Napi::String>();
@@ -1099,16 +1099,16 @@ Napi::Value
 CairoSurface::RecordingSurfaceCreate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
   // content
-  if (!ParamIsNumber(env, "content", info[0])) {
+  if (!ParamIsNumber(info[0], "content", env)) {
     return env.Undefined();
   }
   int content = info[0].As<Napi::Number>();
   // extents
-  if (!ParamIsRectangle(env, "extents", info[1])) {
+  if (!ParamIsRectangle(info[1], "extents", env)) {
     return env.Undefined();
   }
   cairo_rectangle_t rect;
@@ -1122,7 +1122,7 @@ Napi::Value
 CairoSurface::RecordingSurfaceInkExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   double x, y, w, h;
@@ -1139,7 +1139,7 @@ Napi::Value
 CairoSurface::RecordingSurfaceGetExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_rectangle_t rect;
@@ -1157,12 +1157,12 @@ Napi::Value
 CairoSurface::SvgSurfaceCreate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return env.Undefined();
   }
-  if (!ParamIsString(env, "filename", info[0]) ||
-      !ParamIsNumber(env, "width", info[1]) ||
-      !ParamIsNumber(env, "height", info[2])) {
+  if (!ParamIsString(info[0], "filename", env) ||
+      !ParamIsNumber(info[1], "width", env) ||
+      !ParamIsNumber(info[2], "height", env)) {
     return env.Undefined();
   }
   string filename = info[0].As<Napi::String>();
@@ -1190,7 +1190,7 @@ Napi::Value
 CairoSurface::SvgSurfaceGetDocumentUnit(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_svg_unit_t unit = cairo_svg_surface_get_document_unit(this->surface_);
@@ -1206,10 +1206,10 @@ Napi::Value
 CairoSurface::SvgSurfaceSetDocumentUnit(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "unit", info[0])) {
+  if (!ParamIsNumber(info[0], "unit", env)) {
     return info.This();
   }
   int unit = info[0].As<Napi::Number>();
@@ -1221,10 +1221,10 @@ Napi::Value
 CairoSurface::SvgSurfaceRestrictToVersion(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber(env, "version", info[0])) {
+  if (!ParamIsNumber(info[0], "version", env)) {
     return info.This();
   }
   int version = info[0].As<Napi::Number>();
@@ -1237,7 +1237,7 @@ Napi::Value
 CairoSurface::SvgGetVersions(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   const cairo_svg_version_t** versions = nullptr;
@@ -1254,10 +1254,10 @@ Napi::Value
 CairoSurface::SvgVersionToString(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsString(env, "version", info[0])) {
+  if (!ParamIsString(info[0], "version", env)) {
     return env.Undefined();
   }
   int version = info[0].As<Napi::Number>();
@@ -1269,7 +1269,7 @@ Napi::Value
 CairoSurface::ScriptFromRecordingSurface(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
   if (!CairoDevice::HasInstance(info[0])) {
@@ -1292,7 +1292,7 @@ Napi::Value
 CairoSurface::ScriptSurfaceCreate(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 4)) {
+  if (!CheckArgsNumber(info.Length(), 4, env)) {
     return env.Undefined();
   }
   if (!CairoDevice::HasInstance(info[0])) {
@@ -1301,9 +1301,9 @@ CairoSurface::ScriptSurfaceCreate(const Napi::CallbackInfo& info)
   CairoDevice* script =
     Napi::ObjectWrap<CairoDevice>::Unwrap(info[0].As<Napi::Object>());
   int content = info[1].As<Napi::Number>();
-  if (!ParamIsNumber(env, "content", info[1]) ||
-      !ParamIsNumber(env, "width", info[2]) ||
-      !ParamIsNumber(env, "height", info[3])) {
+  if (!ParamIsNumber(info[1], "content", env) ||
+      !ParamIsNumber(info[2], "width", env) ||
+      !ParamIsNumber(info[3], "height", env)) {
     return env.Undefined();
   }
   double width = info[2].As<Napi::Number>();
@@ -1322,7 +1322,7 @@ Napi::Value
 CairoSurface::ScriptSurfaceCreateForTarget(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 2)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
   // script

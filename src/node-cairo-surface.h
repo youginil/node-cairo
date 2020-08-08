@@ -78,7 +78,8 @@ public:
 
   // PNG support
   static Napi::Value ImageSurfaceCreateFromPng(const Napi::CallbackInfo& info);
-  static Napi::Value ImageSurfaceCreateFromPngStream(const Napi::CallbackInfo& info);
+  static Napi::Value ImageSurfaceCreateFromPngStream(
+    const Napi::CallbackInfo& info);
   Napi::Value WriteToPng(const Napi::CallbackInfo& info);
   Napi::Value WriteToPngStream(const Napi::CallbackInfo& info);
 
@@ -108,7 +109,8 @@ public:
   // Script Surfaces
   Napi::Value ScriptFromRecordingSurface(const Napi::CallbackInfo& info);
   static Napi::Value ScriptSurfaceCreate(const Napi::CallbackInfo& info);
-  static Napi::Value ScriptSurfaceCreateForTarget(const Napi::CallbackInfo& info);
+  static Napi::Value ScriptSurfaceCreateForTarget(
+    const Napi::CallbackInfo& info);
 
 private:
   cairo_surface_t* surface_;

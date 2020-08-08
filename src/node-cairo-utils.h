@@ -3,6 +3,7 @@
 
 #include "cairo.h"
 #include <napi.h>
+#include <pango/pangocairo.h>
 
 Napi::Value
 ThrowErrorAsJavaScriptException(const Napi::Env& env, const char* message);
@@ -19,10 +20,10 @@ ThrowStatusErrorAsJavaScriptException(const Napi::Env& env,
                                       cairo_status_t status);
 
 bool
-CheckArgumentsNumber(const Napi::Env& env, int argsNum, int n);
+CheckArgsNumber(int argsNum, int n, const Napi::Env& env);
 
 bool
-ParamIsNumber(const Napi::Env& env, const char* name, const Napi::Value& v);
+ParamIsNumber(const Napi::Value& v, const char* name, const Napi::Env& env);
 /*
 bool
 CheckNumberGreaterThan(const Napi::Env& env,
@@ -37,33 +38,39 @@ const Napi::Value& v,
 const int n,
 const bool equal);
 */
+
 bool
-ParamIsObject(const Napi::Env& env, const char* name, const Napi::Value& v);
+ParamIsBoolean(const Napi::Value& v, const char* name, const Napi::Env& env);
+
 bool
-ParamIsString(const Napi::Env& env, const char* name, const Napi::Value& v);
+ParamIsObject(const Napi::Value& v, const char* name, const Napi::Env& env);
+
+bool
+ParamIsString(const Napi::Value& v, const char* name, const Napi::Env& env);
+
 bool
 CheckNonBlankString(const Napi::Env& env,
                     const char* name,
                     const Napi::Value& v);
 
 bool
-ParamIsFunction(const Napi::Env& env, const char* name, const Napi::Value& v);
+ParamIsFunction(const Napi::Value& v, const char* name, const Napi::Env& env);
 
 bool
-ParamIsArrayBuffer(const Napi::Env& env,
+ParamIsArrayBuffer(const Napi::Value& v,
                    const char* name,
-                   const Napi::Value& v);
+                   const Napi::Env& env);
 
 bool
-ParamIsRectangleInt(const Napi::Env& env,
+ParamIsRectangleInt(const Napi::Value& v,
                     const char* name,
-                    const Napi::Value& v);
+                    const Napi::Env& env);
 
 void
 ObjectToRectangleInt(const Napi::Object& obj, cairo_rectangle_int_t* rect);
 
 bool
-ParamIsRectangle(const Napi::Env& env, const char* name, const Napi::Value& v);
+ParamIsRectangle(const Napi::Value& v, const char* name, const Napi::Env& env);
 
 void
 ObjectToRectangle(const Napi::Object& obj, cairo_rectangle_t* rect);
@@ -77,10 +84,10 @@ bool
 CheckCairoFormatParameter(const Napi::Env& env, const Napi::Value& v);
 
 bool
-ParamIsArray(const Napi::Env& env, const char* name, const Napi::Value& v);
+ParamIsArray(const Napi::Value& v, const char* name, const Napi::Env& env);
 
 bool
-ParamIsMatrix(const Napi::Env& env, const char* name, const Napi::Value& v);
+ParamIsMatrix(const Napi::Value& v, const char* name, const Napi::Env& env);
 
 void
 ObjectToMatrix(const Napi::Object& obj, cairo_matrix_t* matrix);
@@ -124,5 +131,13 @@ void
 TextClusterToObject(const Napi::Env& env,
                     cairo_text_cluster_t* cluster,
                     Napi::Object* obj);
+
+Napi::Value
+PangoLogAttrToValue(const Napi::Env& env, const PangoLogAttr* attr);
+
+void
+PangoRectangleToObject(const Napi::Env& env,
+                       PangoRectangle* rect,
+                       Napi::Object* obj);
 
 #endif

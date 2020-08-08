@@ -1,11 +1,13 @@
-const {CairoSurface, CairoContext, CairoPattern, matrixInit, matrixTranslate} = require('../index.debug');
+const { CairoSurface, CairoContext, PangoLayout, PangoFontDescription} = require('../index');
 
 const s = CairoSurface.imageSurfaceCreate(0, 500, 500);
 const ctx = CairoContext.create(s);
 
-// s.writeToPng("./hello.png");
+const layout = PangoLayout.cairoCreateLayout(ctx);
+layout.setText("Hello world!");
+const desc = PangoFontDescription.fromString('Monaco 30');
+layout.setFontDescription(desc);
+desc.free();
+layout.cairoShowLayout(ctx);
 
-const matrix = matrixInit(100, 0, 0, 100, 10, 10);
-console.log(matrix, matrixTranslate);
-const result = matrixTranslate(matrix, 0.5, 0.5);
-console.log(matrix, result);
+s.writeToPng("./hello.png");

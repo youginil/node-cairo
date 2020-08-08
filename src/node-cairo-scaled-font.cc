@@ -87,7 +87,7 @@ Napi::Value
 CairoScaledFont::Create(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 4)) {
+  if (!CheckArgsNumber(info.Length(), 4, env)) {
     return env.Undefined();
   }
   if (!CairoFontFace::HasInstance(info[0])) {
@@ -95,8 +95,8 @@ CairoScaledFont::Create(const Napi::CallbackInfo& info)
   }
   CairoFontFace* face =
     Napi::ObjectWrap<CairoFontFace>::Unwrap(info[0].As<Napi::Object>());
-  if (!ParamIsMatrix(env, "font matrix", info[1]) ||
-      !ParamIsMatrix(env, "ctm", info[2])) {
+  if (!ParamIsMatrix(info[1], "font matrix", env) ||
+      !ParamIsMatrix(info[2], "ctm", env)) {
     return env.Undefined();
   }
   cairo_matrix_t fontMatrix, ctm;
@@ -120,10 +120,6 @@ CairoScaledFont::Create(const Napi::CallbackInfo& info)
 Napi::Value
 CairoScaledFont::Reference(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_scaled_font_reference(this->scaledFont_);
   return info.This();
 }
@@ -131,10 +127,6 @@ CairoScaledFont::Reference(const Napi::CallbackInfo& info)
 Napi::Value
 CairoScaledFont::Destroy(const Napi::CallbackInfo& info)
 {
-  Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_scaled_font_destroy(this->scaledFont_);
   return info.This();
 }
@@ -143,9 +135,6 @@ Napi::Value
 CairoScaledFont::Status(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_status_t status = cairo_scaled_font_status(this->scaledFont_);
   return Napi::Number::New(env, status);
 }
@@ -154,9 +143,6 @@ Napi::Value
 CairoScaledFont::Extents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_font_extents_t extents;
   cairo_scaled_font_extents(this->scaledFont_, &extents);
   Napi::Object result = Napi::Object::New(env);
@@ -168,10 +154,10 @@ Napi::Value
 CairoScaledFont::TextExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsString(env, "text", info[0])) {
+  if (!ParamIsString(info[0], "text", env)) {
     return env.Undefined();
   }
   string text = info[0].As<Napi::String>();
@@ -186,10 +172,10 @@ Napi::Value
 CairoScaledFont::GlyphExtents(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 1)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsArray(env, "glyphs", info[0])) {
+  if (!ParamIsArray(info[0], "glyphs", env)) {
     return env.Undefined();
   }
   Napi::Array arr = info[0].As<Napi::Array>();
@@ -211,11 +197,11 @@ Napi::Value
 CairoScaledFont::TextToGlyphs(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 3)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber(env, "x", info[0]) || !ParamIsNumber(env, "y", info[1]) ||
-      !ParamIsString(env, "text", info[2])) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env) ||
+      !ParamIsString(info[2], "text", env)) {
     return env.Undefined();
   }
   double x = info[0].As<Napi::Number>();
@@ -269,9 +255,6 @@ Napi::Value
 CairoScaledFont::GetFontFace(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_font_face_t* face = cairo_scaled_font_get_font_face(this->scaledFont_);
   cairo_status_t status = cairo_font_face_status(face);
   if (status != CAIRO_STATUS_SUCCESS) {
@@ -285,9 +268,6 @@ Napi::Value
 CairoScaledFont::GetFontOptions(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_font_options_t* options = cairo_font_options_create();
   cairo_scaled_font_get_font_options(this->scaledFont_, options);
   cairo_status_t status = cairo_font_options_status(options);
@@ -302,9 +282,6 @@ Napi::Value
 CairoScaledFont::GetFontMatrix(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_matrix_t matrix;
   cairo_scaled_font_get_font_matrix(this->scaledFont_, &matrix);
   Napi::Object result = Napi::Object::New(env);
@@ -316,9 +293,6 @@ Napi::Value
 CairoScaledFont::GetCtm(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_matrix_t matrix;
   cairo_scaled_font_get_ctm(this->scaledFont_, &matrix);
   Napi::Object result = Napi::Object::New(env);
@@ -330,9 +304,6 @@ Napi::Value
 CairoScaledFont::GetScaleMatrix(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_matrix_t matrix;
   cairo_scaled_font_get_scale_matrix(this->scaledFont_, &matrix);
   Napi::Object result = Napi::Object::New(env);
@@ -344,9 +315,6 @@ Napi::Value
 CairoScaledFont::GetType(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   cairo_font_type_t type = cairo_scaled_font_get_type(this->scaledFont_);
   return Napi::Number::New(env, type);
 }
@@ -355,9 +323,6 @@ Napi::Value
 CairoScaledFont::GetReferenceCount(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgumentsNumber(env, info.Length(), 0)) {
-    return env.Undefined();
-  }
   unsigned int count = cairo_scaled_font_get_reference_count(this->scaledFont_);
   return Napi::Number::New(env, count);
 }
