@@ -20,7 +20,8 @@
                 "src/node-pango-font-description.cc",
                 "src/node-pango-layout.cc",
                 "src/node-pango-layout-iter.cc",
-                "src/node-pango-layout-line.cc"
+                "src/node-pango-layout-line.cc",
+                "src/node-pango-utils.cc"
             ],
             "cflags!": ["-fno-exceptions"],
             "cflags_cc!": ["-fno-exceptions"],

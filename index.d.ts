@@ -561,7 +561,9 @@ export class CairoPath {
   destroy(): this;
 }
 
-export class CairoFontOptions { }
+export class CairoFontOptions {
+  setAntialias(antialias: CairoAntialias): this;
+}
 
 export class CairoFontFace {
   reference(): this;
@@ -753,3 +755,5 @@ export class PangoLayoutIter {
   getLineExtents(): { ink: PangoRectangle | null; logical: PangoRectangle | null };
   getLayoutExtents(): { ink: PangoRectangle | null; logical: PangoRectangle | null };
 }
+
+export function markupEscapeText(text: string): string;

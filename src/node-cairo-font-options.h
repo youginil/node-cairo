@@ -17,6 +17,8 @@ public:
   cairo_font_options_t* GetOptions();
   void SetOptions(cairo_font_options_t* options);
 
+  Napi::Value SetAntialias(const Napi::CallbackInfo& info);
+
 private:
   cairo_font_options_t* options_;
 };

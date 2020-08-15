@@ -15,6 +15,7 @@
 #include "node-pango-layout-iter.h"
 #include "node-pango-layout-line.h"
 #include "node-pango-layout.h"
+#include "node-pango-utils.h"
 
 Napi::Object
 InitAll(Napi::Env env, Napi::Object exports)
@@ -36,6 +37,7 @@ InitAll(Napi::Env env, Napi::Object exports)
   NodePangoLayout::Init(env, exports);
   NodePangoLayoutIter::Init(env, exports);
   NodePangoLayoutLine::Init(env, exports);
+  InitPangoUtils(env, exports);
 
   return exports;
 }
