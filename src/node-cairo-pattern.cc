@@ -116,13 +116,13 @@ Napi::Value
 CairoPattern::AddColorStopRgb(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  4, env)) {
+  if (!CheckArgsNumber(info.Length(), 4, env)) {
     return info.This();
   }
-  if (!ParamIsNumber( info[0],  "offset", env) ||
-      !ParamIsNumber( info[1],  "red", env) ||
-      !ParamIsNumber( info[2],  "green", env) ||
-      !ParamIsNumber( info[3],  "blue", env)) {
+  if (!ParamIsNumber(info[0], "offset", env) ||
+      !ParamIsNumber(info[1], "red", env) ||
+      !ParamIsNumber(info[2], "green", env) ||
+      !ParamIsNumber(info[3], "blue", env)) {
     return info.This();
   }
   double offset = info[0].As<Napi::Number>();
@@ -137,14 +137,14 @@ Napi::Value
 CairoPattern::AddColorStopRgba(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  5, env)) {
+  if (!CheckArgsNumber(info.Length(), 5, env)) {
     return info.This();
   }
-  if (!ParamIsNumber( info[0],  "offset", env) ||
-      !ParamIsNumber( info[1],  "red", env) ||
-      !ParamIsNumber( info[2],  "green", env) ||
-      !ParamIsNumber( info[3],  "blue", env) ||
-      !ParamIsNumber( info[4],  "alpha", env)) {
+  if (!ParamIsNumber(info[0], "offset", env) ||
+      !ParamIsNumber(info[1], "red", env) ||
+      !ParamIsNumber(info[2], "green", env) ||
+      !ParamIsNumber(info[3], "blue", env) ||
+      !ParamIsNumber(info[4], "alpha", env)) {
     return info.This();
   }
   double offset = info[0].As<Napi::Number>();
@@ -161,7 +161,7 @@ Napi::Value
 CairoPattern::GetColorStopCount(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   int count;
@@ -178,10 +178,10 @@ Napi::Value
 CairoPattern::GetColorStopRgba(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  1, env)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber( info[0],  "index", env)) {
+  if (!ParamIsNumber(info[0], "index", env)) {
     return env.Undefined();
   }
   int index = info[0].As<Napi::Number>();
@@ -201,12 +201,12 @@ Napi::Value
 CairoPattern::CreateRgb(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  3, env)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber( info[0],  "red", env) ||
-      !ParamIsNumber( info[1],  "green", env) ||
-      !ParamIsNumber( info[2],  "blue", env)) {
+  if (!ParamIsNumber(info[0], "red", env) ||
+      !ParamIsNumber(info[1], "green", env) ||
+      !ParamIsNumber(info[2], "blue", env)) {
     return env.Undefined();
   }
   double r = info[0].As<Napi::Number>();
@@ -224,12 +224,12 @@ Napi::Value
 CairoPattern::CreateRgba(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  4, env)) {
+  if (!CheckArgsNumber(info.Length(), 4, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber( info[0],  "red", env) ||
-      !ParamIsNumber( info[1],  "green", env) ||
-      !ParamIsNumber( info[2],  "blue", env)) {
+  if (!ParamIsNumber(info[0], "red", env) ||
+      !ParamIsNumber(info[1], "green", env) ||
+      !ParamIsNumber(info[2], "blue", env)) {
     return env.Undefined();
   }
   double r = info[0].As<Napi::Number>();
@@ -249,7 +249,7 @@ Napi::Value
 CairoPattern::GetRgba(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   double r, g, b, a;
@@ -266,7 +266,7 @@ Napi::Value
 CairoPattern::CreateForSurface(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  1, env)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
   if (!CairoSurface::HasInstance(info[0])) {
@@ -287,7 +287,7 @@ Napi::Value
 CairoPattern::GetSurface(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_surface_t* surface = nullptr;
@@ -303,13 +303,13 @@ Napi::Value
 CairoPattern::CreateLinear(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  4, env)) {
+  if (!CheckArgsNumber(info.Length(), 4, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber( info[0],  "start x", env) ||
-      !ParamIsNumber( info[1],  "start y", env) ||
-      !ParamIsNumber( info[2],  "end x", env) ||
-      !ParamIsNumber( info[3],  "end y", env)) {
+  if (!ParamIsNumber(info[0], "start x", env) ||
+      !ParamIsNumber(info[1], "start y", env) ||
+      !ParamIsNumber(info[2], "end x", env) ||
+      !ParamIsNumber(info[3], "end y", env)) {
     return env.Undefined();
   }
   double x0 = info[0].As<Napi::Number>();
@@ -329,7 +329,7 @@ Napi::Value
 CairoPattern::GetLinearPoints(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   double *x0 = nullptr, *y0 = nullptr, *x1 = nullptr, *y1 = nullptr;
@@ -354,15 +354,15 @@ Napi::Value
 CairoPattern::CreateRadial(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  6, env)) {
+  if (!CheckArgsNumber(info.Length(), 6, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber( info[0],  "start x", env) ||
-      !ParamIsNumber( info[1],  "start y", env) ||
-      !ParamIsNumber( info[2],  "start radius", env) ||
-      !ParamIsNumber( info[3],  "end x", env) ||
-      !ParamIsNumber( info[4],  "end y", env) ||
-      !ParamIsNumber( info[5],  "end radius", env)) {
+  if (!ParamIsNumber(info[0], "start x", env) ||
+      !ParamIsNumber(info[1], "start y", env) ||
+      !ParamIsNumber(info[2], "start radius", env) ||
+      !ParamIsNumber(info[3], "end x", env) ||
+      !ParamIsNumber(info[4], "end y", env) ||
+      !ParamIsNumber(info[5], "end radius", env)) {
     return env.Undefined();
   }
   double x0 = info[0].As<Napi::Number>();
@@ -384,7 +384,7 @@ Napi::Value
 CairoPattern::GetRadialCircles(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   double *x0 = nullptr, *y0 = nullptr, *r0 = nullptr, *x1 = nullptr,
@@ -412,7 +412,7 @@ Napi::Value
 CairoPattern::CreateMesh(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_pattern_t* p = cairo_pattern_create_mesh();
@@ -428,7 +428,7 @@ Napi::Value
 CairoPattern::MeshPatternBeginPath(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return info.This();
   }
   cairo_mesh_pattern_begin_patch(this->pattern_);
@@ -444,7 +444,7 @@ Napi::Value
 CairoPattern::MeshPatternEndPath(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return info.This();
   }
   cairo_mesh_pattern_end_patch(this->pattern_);
@@ -460,10 +460,10 @@ Napi::Value
 CairoPattern::MeshPatternMoveTo(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  2, env)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
-  if (!ParamIsNumber( info[0],  "x", env) || !ParamIsNumber( info[1],  "y", env)) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return info.This();
   }
   double x = info[0].As<Napi::Number>();
@@ -480,10 +480,10 @@ Napi::Value
 CairoPattern::MeshPatternLineTo(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  2, env)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return info.This();
   }
-  if (!ParamIsNumber( info[0],  "x", env) || !ParamIsNumber( info[1],  "y", env)) {
+  if (!ParamIsNumber(info[0], "x", env) || !ParamIsNumber(info[1], "y", env)) {
     return info.This();
   }
   double x = info[0].As<Napi::Number>();
@@ -500,15 +500,15 @@ Napi::Value
 CairoPattern::MeshPatternCurveTo(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  6, env)) {
+  if (!CheckArgsNumber(info.Length(), 6, env)) {
     return info.This();
   }
-  if (!ParamIsNumber( info[0],  "x1", env) ||
-      !ParamIsNumber( info[1],  "y1", env) ||
-      !ParamIsNumber( info[2],  "x2", env) ||
-      !ParamIsNumber( info[3],  "y2", env) ||
-      !ParamIsNumber( info[4],  "x3", env) ||
-      !ParamIsNumber( info[5],  "y3", env)) {
+  if (!ParamIsNumber(info[0], "x1", env) ||
+      !ParamIsNumber(info[1], "y1", env) ||
+      !ParamIsNumber(info[2], "x2", env) ||
+      !ParamIsNumber(info[3], "y2", env) ||
+      !ParamIsNumber(info[4], "x3", env) ||
+      !ParamIsNumber(info[5], "y3", env)) {
     return info.This();
   }
   double x1 = info[0].As<Napi::Number>();
@@ -530,11 +530,11 @@ Napi::Value
 CairoPattern::MeshPatternSetControlPoint(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  3, env)) {
+  if (!CheckArgsNumber(info.Length(), 3, env)) {
     return info.This();
   }
-  if (!ParamIsNumber( info[0],  "point num", env) ||
-      !ParamIsNumber( info[1],  "x", env) || !ParamIsNumber( info[2],  "y", env)) {
+  if (!ParamIsNumber(info[0], "point num", env) ||
+      !ParamIsNumber(info[1], "x", env) || !ParamIsNumber(info[2], "y", env)) {
     return info.This();
   }
   unsigned int num = info[0].As<Napi::Number>();
@@ -553,13 +553,13 @@ Napi::Value
 CairoPattern::MeshPatternSetCornerColorRgb(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  4, env)) {
+  if (!CheckArgsNumber(info.Length(), 4, env)) {
     return info.This();
   }
-  if (!ParamIsNumber( info[0],  "corner num", env) ||
-      !ParamIsNumber( info[1],  "red", env) ||
-      !ParamIsNumber( info[2],  "green", env) ||
-      !ParamIsNumber( info[3],  "blue", env)) {
+  if (!ParamIsNumber(info[0], "corner num", env) ||
+      !ParamIsNumber(info[1], "red", env) ||
+      !ParamIsNumber(info[2], "green", env) ||
+      !ParamIsNumber(info[3], "blue", env)) {
     return info.This();
   }
   unsigned int num = info[0].As<Napi::Number>();
@@ -579,14 +579,14 @@ Napi::Value
 CairoPattern::MeshPatternSetCornerColorRgba(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  5, env)) {
+  if (!CheckArgsNumber(info.Length(), 5, env)) {
     return info.This();
   }
-  if (!ParamIsNumber( info[0],  "corner num", env) ||
-      !ParamIsNumber( info[1],  "red", env) ||
-      !ParamIsNumber( info[2],  "green", env) ||
-      !ParamIsNumber( info[3],  "blue", env) ||
-      !ParamIsNumber( info[4],  "alpha", env)) {
+  if (!ParamIsNumber(info[0], "corner num", env) ||
+      !ParamIsNumber(info[1], "red", env) ||
+      !ParamIsNumber(info[2], "green", env) ||
+      !ParamIsNumber(info[3], "blue", env) ||
+      !ParamIsNumber(info[4], "alpha", env)) {
     return info.This();
   }
   unsigned int num = info[0].As<Napi::Number>();
@@ -607,7 +607,7 @@ Napi::Value
 CairoPattern::MeshPatternGetPatchCount(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   unsigned int* count = nullptr;
@@ -625,10 +625,10 @@ Napi::Value
 CairoPattern::MeshPatternGetPath(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  1, env)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber( info[0],  "path num", env)) {
+  if (!ParamIsNumber(info[0], "path num", env)) {
     return env.Undefined();
   }
   unsigned int num = info[0].As<Napi::Number>();
@@ -645,11 +645,11 @@ Napi::Value
 CairoPattern::MeshPatternGetControlPoint(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  2, env)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber( info[0],  "patch num", env) ||
-      !ParamIsNumber( info[1],  "point num", env)) {
+  if (!ParamIsNumber(info[0], "patch num", env) ||
+      !ParamIsNumber(info[1], "point num", env)) {
     return env.Undefined();
   }
   unsigned int patchNum = info[0].As<Napi::Number>();
@@ -672,11 +672,11 @@ Napi::Value
 CairoPattern::MeshPatternGetCornerColorRgba(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  2, env)) {
+  if (!CheckArgsNumber(info.Length(), 2, env)) {
     return env.Undefined();
   }
-  if (!ParamIsNumber( info[0],  "patch num", env) ||
-      !ParamIsNumber( info[1],  "corner num", env)) {
+  if (!ParamIsNumber(info[0], "patch num", env) ||
+      !ParamIsNumber(info[1], "corner num", env)) {
     return env.Undefined();
   }
   unsigned int patchNum = info[0].As<Napi::Number>();
@@ -701,7 +701,7 @@ Napi::Value
 CairoPattern::Reference(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return info.This();
   }
   cairo_pattern_reference(this->pattern_);
@@ -712,7 +712,7 @@ Napi::Value
 CairoPattern::Destroy(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   if (this->pattern_) {
@@ -726,7 +726,7 @@ Napi::Value
 CairoPattern::Status(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_status_t status = cairo_pattern_status(this->pattern_);
@@ -737,10 +737,10 @@ Napi::Value
 CairoPattern::SetExtend(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  1, env)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber( info[0],  "extend", env)) {
+  if (!ParamIsNumber(info[0], "extend", env)) {
     return info.This();
   }
   int extend = info[0].As<Napi::Number>();
@@ -752,7 +752,7 @@ Napi::Value
 CairoPattern::GetExtend(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_extend_t extend = cairo_pattern_get_extend(this->pattern_);
@@ -763,10 +763,10 @@ Napi::Value
 CairoPattern::SetFilter(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  1, env)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsNumber( info[0],  "filter", env)) {
+  if (!ParamIsNumber(info[0], "filter", env)) {
     return info.This();
   }
   int filter = info[0].As<Napi::Number>();
@@ -778,7 +778,7 @@ Napi::Value
 CairoPattern::GetFilter(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_filter_t filter = cairo_pattern_get_filter(this->pattern_);
@@ -789,10 +789,10 @@ Napi::Value
 CairoPattern::SetMatrix(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  1, env)) {
+  if (!CheckArgsNumber(info.Length(), 1, env)) {
     return info.This();
   }
-  if (!ParamIsMatrix( info[0],  "matrix", env)) {
+  if (!ParamIsMatrix(info[0], "matrix", env)) {
     return info.This();
   }
   cairo_matrix_t matrix;
@@ -805,7 +805,7 @@ Napi::Value
 CairoPattern::GetMatrix(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_matrix_t matrix;
@@ -819,7 +819,7 @@ Napi::Value
 CairoPattern::GetType(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   cairo_pattern_type_t type = cairo_pattern_get_type(this->pattern_);
@@ -830,7 +830,7 @@ Napi::Value
 CairoPattern::GetReferenceCount(const Napi::CallbackInfo& info)
 {
   Napi::Env env = info.Env();
-  if (!CheckArgsNumber( info.Length(),  0, env)) {
+  if (!CheckArgsNumber(info.Length(), 0, env)) {
     return env.Undefined();
   }
   unsigned int count = cairo_pattern_get_reference_count(this->pattern_);

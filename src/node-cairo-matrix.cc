@@ -104,7 +104,7 @@ MatrixInitScale(const Napi::CallbackInfo& info)
   double sy = info[1].As<Napi::Number>();
   cairo_matrix_t matrix;
   cairo_matrix_init_scale(&matrix, sx, sy);
-  Napi::Object result;
+  Napi::Object result = Napi::Object::New(env);
   MatrixToObject(env, &matrix, &result);
   return result;
 }
