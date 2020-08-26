@@ -17,6 +17,9 @@
 #include "node-pango-layout.h"
 #include "node-pango-utils.h"
 
+#include "node-rsvg-enum.h"
+#include "node-rsvg-handle.h"
+
 Napi::Object
 InitAll(Napi::Env env, Napi::Object exports)
 {
@@ -38,6 +41,9 @@ InitAll(Napi::Env env, Napi::Object exports)
   NodePangoLayoutIter::Init(env, exports);
   NodePangoLayoutLine::Init(env, exports);
   InitPangoUtils(env, exports);
+
+  InitRsvgEnums(env, exports);
+  NodeRsvgHandle::Init(env, exports);
 
   return exports;
 }

@@ -2,6 +2,7 @@
 #define __NODE_CAIRO_UTILS_H__
 
 #include "cairo.h"
+#include <librsvg/rsvg.h>
 #include <napi.h>
 #include <pango/pangocairo.h>
 
@@ -139,5 +140,23 @@ void
 PangoRectangleToObject(const Napi::Env& env,
                        PangoRectangle* rect,
                        Napi::Object* obj);
+
+void
+RsvgLengthToObject(const Napi::Env& env, RsvgLength* length, Napi::Object* obj);
+
+bool
+ParamIsRsvgRectangle(const Napi::Value& v,
+                     const char* name,
+                     const Napi::Env& env);
+
+void
+ObjectToRsvgRectangle(const Napi::Env& env,
+                      Napi::Object* obj,
+                      RsvgRectangle* rect);
+
+void
+RsvgRectangleToObject(const Napi::Env& env,
+                      RsvgRectangle* rect,
+                      Napi::Object* obj);
 
 #endif

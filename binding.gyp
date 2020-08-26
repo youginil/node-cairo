@@ -21,7 +21,9 @@
                 "src/node-pango-layout.cc",
                 "src/node-pango-layout-iter.cc",
                 "src/node-pango-layout-line.cc",
-                "src/node-pango-utils.cc"
+                "src/node-pango-utils.cc",
+                "src/node-rsvg-handle.cc",
+                "src/node-rsvg-enum.cc"
             ],
             "cflags!": ["-fno-exceptions"],
             "cflags_cc!": ["-fno-exceptions"],
@@ -31,12 +33,15 @@
                 "/usr/local/opt/pango/include/pango-1.0",
                 "/usr/local/opt/glib/include/glib-2.0",
                 "/usr/local/opt/glib/lib/glib-2.0/include",
-                "/usr/local/opt/harfbuzz/include/harfbuzz"
+                "/usr/local/opt/harfbuzz/include/harfbuzz",
+                "/usr/local/opt/librsvg/include/librsvg-2.0",
+                "/usr/local/opt/gdk-pixbuf/include/gdk-pixbuf-2.0"
             ],
             "defines": ['NAPI_DISABLE_CPP_EXCEPTIONS'],
             "libraries": [
                 "/usr/local/opt/cairo/lib/libcairo.dylib",
-                "/usr/local/opt/pango/lib/libpangocairo-1.0.dylib"
+                "/usr/local/opt/pango/lib/libpangocairo-1.0.dylib",
+                "/usr/local/opt/librsvg/lib/librsvg-2.dylib"
             ]
         }
     ]

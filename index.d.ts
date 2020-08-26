@@ -757,3 +757,26 @@ export class PangoLayoutIter {
 }
 
 export function markupEscapeText(text: string): string;
+
+export enum RsvgUnit {
+  PERCENT,
+  PX,
+  EM,
+  EX,
+  IN,
+  CM,
+  MM,
+  PT,
+  PC
+}
+
+export type RsvgLength = { length: number; unit: RsvgUnit };
+
+export type RsvgRectangle = { x: number; y: number; width: number; height: number }
+
+export class RsvgHandle {
+  static newFromFile(filename: string): RsvgHandle;
+  getIntrinsicDimensions(): { width: RsvgLength | null; height: RsvgLength | null; viewbox: RsvgRectangle | null };
+  renderDocument(ctx: CairoContext, viewport: RsvgRectangle): this;
+  setStylesheet(css: string): this;
+}

@@ -456,3 +456,51 @@ PangoRectangleToObject(const Napi::Env& env,
   obj->Set("width", Napi::Number::New(env, rect->width));
   obj->Set("height", Napi::Number::New(env, rect->height));
 }
+
+void
+RsvgLengthToObject(const Napi::Env& env, RsvgLength* length, Napi::Object* obj)
+{
+  obj->Set("length", Napi::Number::New(env, length->length));
+  obj->Set("unit", Napi::Number::New(env, length->unit));
+}
+
+bool
+ParamIsRsvgRectangle(const Napi::Value& v,
+                     const char* name,
+                     const Napi::Env& env)
+{
+  if (v.IsObject()) {
+    Napi::Object o = v.As<Napi::Object>();
+    if (o.HasOwnProperty("x") && o.Get("x").IsNumber() &&
+        o.HasOwnProperty("y") && o.Get("y").IsNumber() &&
+        o.HasOwnProperty("width") && o.Get("width").IsNumber() &&
+        o.HasOwnProperty("height") && o.Get("height").IsNumber()) {
+      return true;
+    }
+  }
+  ThrowTypeErrorAsJavaScriptException(
+    env, (string(name) + " is not RsvgRectangle").c_str());
+  return false;
+}
+
+void
+ObjectToRsvgRectangle(const Napi::Env& env,
+                      Napi::Object* obj,
+                      RsvgRectangle* rect)
+{
+  rect->x = obj->Get("x").As<Napi::Number>();
+  rect->y = obj->Get("y").As<Napi::Number>();
+  rect->width = obj->Get("width").As<Napi::Number>();
+  rect->height = obj->Get("height").As<Napi::Number>();
+}
+
+void
+RsvgRectangleToObject(const Napi::Env& env,
+                      RsvgRectangle* rect,
+                      Napi::Object* obj)
+{
+  obj->Set("x", Napi::Number::New(env, rect->x));
+  obj->Set("y", Napi::Number::New(env, rect->y));
+  obj->Set("width", Napi::Number::New(env, rect->width));
+  obj->Set("height", Napi::Number::New(env, rect->height));
+}

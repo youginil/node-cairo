@@ -9,7 +9,10 @@
                 "/usr/local/opt/pango/include/pango-1.0",
                 "/usr/local/opt/glib/include/glib-2.0",
                 "/usr/local/opt/glib/lib/glib-2.0/include",
-                "/usr/local/opt/harfbuzz/include/harfbuzz"
+                "/usr/local/opt/harfbuzz/include/harfbuzz",
+                "/usr/local/opt/librsvg/include/librsvg-2.0",
+                "/usr/local/opt/librsvg/include/librsvg-2.0/",
+                "/usr/local/opt/gdk-pixbuf/include/gdk-pixbuf-2.0"
             ],
             "defines": [],
             "macFrameworkPath": [
